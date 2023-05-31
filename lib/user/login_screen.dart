@@ -22,6 +22,11 @@ class _LoginScreenState extends State<LoginScreen> {
   final _formData = Map<String, Object>();
   bool isLoading = false;
 
+  // function to disable back button
+  Future<bool> _onPop() async {
+    return false;
+  }
+
   // on submit function
   _onSubmit() async {
     _formKey.currentState!.save();
@@ -64,192 +69,193 @@ class _LoginScreenState extends State<LoginScreen> {
         showAlertDialogueBox(context, "Invalid username or password!");
       }
     }
-
-    print("Email : ${_formData['email']}");
-    print("Password : ${_formData['password']}");
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        width: double.infinity,
-        height: double.infinity,
-        decoration: BoxDecoration(
-            gradient: LinearGradient(colors: [
-          Color(0xffdad4ec).withOpacity(0.75),
-          Color(0xffdad4ec).withOpacity(0.5),
-          Color(0xfff3e7e9).withOpacity(0.75)
-        ])
-        ),
-        child: Center(
-          child: SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Stack(
-                children: [
-                  isLoading
-                      ? progressIndicator(context)
-                      : SingleChildScrollView(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              // app icon
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Image.asset(
-                                  "assets/images/icon/logo.png",
-                                  width: 120,
-                                ),
-                              ),
+    return WillPopScope(
+      onWillPop: _onPop,
 
-                              // login text
-                              Padding(
-                                padding: const EdgeInsets.all(15.0),
-                                child: Text(
-                                  "Welcome",
-                                  style: TextStyle(
-                                    fontSize: 30,
-                                    fontFamily: 'Dosis-Regular',
-                                    color: Color(0xff401693),
-                                    fontWeight: FontWeight.bold
+      child: Scaffold(
+        body: Container(
+          width: double.infinity,
+          height: double.infinity,
+          decoration: BoxDecoration(
+              gradient: LinearGradient(colors: [
+            Color(0xffdad4ec).withOpacity(0.75),
+            Color(0xffdad4ec).withOpacity(0.5),
+            Color(0xfff3e7e9).withOpacity(0.75)
+          ])
+          ),
+          child: Center(
+            child: SafeArea(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Stack(
+                  children: [
+                    isLoading
+                        ? progressIndicator(context)
+                        : SingleChildScrollView(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                // app icon
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Image.asset(
+                                    "assets/images/icon/logo.png",
+                                    width: 120,
                                   ),
                                 ),
-                              ),
 
-                              // form
-                              Form(
-                                key: _formKey,
-                                child: Column(
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: LoginTextField(
-                                        hintText: "Email",
-                                        textInputAction: TextInputAction.next,
-                                        keyboardType:
-                                            TextInputType.emailAddress,
-                                        prefix: Icon(Icons.person),
-                                        onSave: (email) {
-                                          _formData['email'] = email ?? "";
-                                        },
-                                        validate: (email) {
-                                          if (email!.isEmpty ||
-                                              email.length < 8 ||
-                                              !email.contains("@") ||
-                                              email.contains(" ")) {
-                                            return "Invalid email address";
-                                          } else {
-                                            return null;
-                                          }
-                                        },
-                                      ),
+                                // login text
+                                Padding(
+                                  padding: const EdgeInsets.all(15.0),
+                                  child: Text(
+                                    "Welcome",
+                                    style: TextStyle(
+                                      fontSize: 30,
+                                      fontFamily: 'Dosis-Regular',
+                                      color: Color(0xff401693),
+                                      fontWeight: FontWeight.bold
                                     ),
+                                  ),
+                                ),
 
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: LoginTextField(
-                                        hintText: "Password",
-                                        keyboardType: TextInputType.visiblePassword,
-                                        prefix: Icon(Icons.fingerprint),
-                                        onSave: (password) {
-                                          _formData['password'] =
-                                              password ?? "";
-                                        },
-                                        validate: (password) {
-                                          if (password!.isEmpty ||
-                                              password.length < 8 ||
-                                              password.contains(" ")) {
-                                            return "Incorrect password";
-                                          } else {
-                                            return null;
-                                          }
-                                        },
-                                        isPassword: isPasswordHide,
-                                        suffix: IconButton(
-                                          onPressed: () {
-                                            setState(() {
-                                              isPasswordHide = !isPasswordHide;
-                                            });
+                                // form
+                                Form(
+                                  key: _formKey,
+                                  child: Column(
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: LoginTextField(
+                                          hintText: "Email",
+                                          textInputAction: TextInputAction.next,
+                                          keyboardType:
+                                              TextInputType.emailAddress,
+                                          prefix: Icon(Icons.person),
+                                          onSave: (email) {
+                                            _formData['email'] = email ?? "";
                                           },
-                                          icon: isPasswordHide
-                                              ? Icon(Icons.visibility_off)
-                                              : Icon(Icons.visibility),
+                                          validate: (email) {
+                                            if (email!.isEmpty ||
+                                                email.length < 8 ||
+                                                !email.contains("@") ||
+                                                email.contains(" ")) {
+                                              return "Invalid email address";
+                                            } else {
+                                              return null;
+                                            }
+                                          },
                                         ),
                                       ),
-                                    ),
 
-                                    // forgot password button
-                                    Padding(
-                                      padding: const EdgeInsets.only(
-                                          top: 5,
-                                          bottom: 10,
-                                          left: 15,
-                                          right: 15),
-                                      child: Align(
-                                        alignment: Alignment.bottomRight,
-                                        child: GestureDetector(
-                                          onTap: () {
-                                            Navigator.push(context, MaterialPageRoute(builder: (context) => ForgotPasswodPage()));
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: LoginTextField(
+                                          hintText: "Password",
+                                          keyboardType: TextInputType.visiblePassword,
+                                          prefix: Icon(Icons.fingerprint),
+                                          onSave: (password) {
+                                            _formData['password'] =
+                                                password ?? "";
                                           },
-                                          child: Text(
-                                            "Forgot Password?",
-                                            style: TextStyle(
-                                                fontFamily: 'PTSans-Regular',
-                                                color: Colors.grey,
-                                                fontWeight: FontWeight.bold),
-                                            textAlign: TextAlign.right,
+                                          validate: (password) {
+                                            if (password!.isEmpty ||
+                                                password.length < 8 ||
+                                                password.contains(" ")) {
+                                              return "Incorrect password";
+                                            } else {
+                                              return null;
+                                            }
+                                          },
+                                          isPassword: isPasswordHide,
+                                          suffix: IconButton(
+                                            onPressed: () {
+                                              setState(() {
+                                                isPasswordHide = !isPasswordHide;
+                                              });
+                                            },
+                                            icon: isPasswordHide
+                                                ? Icon(Icons.visibility_off)
+                                                : Icon(Icons.visibility),
                                           ),
                                         ),
                                       ),
-                                    ),
 
-                                    // login button
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: PrimaryButton(
-                                        title: "Login",
-                                        onPressed: () {
-                                          if (_formKey.currentState!
-                                              .validate()) {
-                                            _onSubmit();
-                                          }
-                                        },
+                                      // forgot password button
+                                      Padding(
+                                        padding: const EdgeInsets.only(
+                                            top: 5,
+                                            bottom: 10,
+                                            left: 15,
+                                            right: 15),
+                                        child: Align(
+                                          alignment: Alignment.bottomRight,
+                                          child: GestureDetector(
+                                            onTap: () {
+                                              Navigator.push(context, MaterialPageRoute(builder: (context) => ForgotPasswodPage()));
+                                            },
+                                            child: Text(
+                                              "Forgot Password?",
+                                              style: TextStyle(
+                                                  fontFamily: 'PTSans-Regular',
+                                                  color: Colors.grey,
+                                                  fontWeight: FontWeight.bold),
+                                              textAlign: TextAlign.right,
+                                            ),
+                                          ),
+                                        ),
                                       ),
-                                    ),
-                                  ],
-                                ),
-                              ),
 
-                              // create new account button
-                              Padding(
-                                padding: const EdgeInsets.only(top: 50),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      "Don't have an account?",
-                                      style: TextStyle(
-                                          fontFamily: 'PTSans-Regular'),
-                                    ),
-                                    SecondaryButton(
-                                        title: "Create new account",
-                                        onPressed: () {
-                                          Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      RegisterUser()));
-                                        }),
-                                  ],
+                                      // login button
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: PrimaryButton(
+                                          title: "Login",
+                                          onPressed: () {
+                                            if (_formKey.currentState!
+                                                .validate()) {
+                                              _onSubmit();
+                                            }
+                                          },
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                              )
-                            ],
+
+                                // create new account button
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 50),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        "Don't have an account?",
+                                        style: TextStyle(
+                                            fontFamily: 'PTSans-Regular'),
+                                      ),
+                                      SecondaryButton(
+                                          title: "Create new account",
+                                          onPressed: () {
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        RegisterUser()));
+                                          }),
+                                    ],
+                                  ),
+                                )
+                              ],
+                            ),
                           ),
-                        ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),

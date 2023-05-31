@@ -12,13 +12,18 @@ import 'package:v_safe/pages/home_screen.dart';
 import 'package:v_safe/pages/network_screen.dart';
 import 'package:v_safe/pages/profile_screen.dart';
 
-class BottomNavBar extends StatefulWidget{
+class BottomNavBar extends StatefulWidget {
   @override
   State<BottomNavBar> createState() => _BottomNavBarState();
 }
-
+ 
 class _BottomNavBarState extends State<BottomNavBar> {
   int _page = 0;
+  Icon homeIcon = Icon(CupertinoIcons.house_fill, color: Colors.white);
+  FaIcon networkIcon = FaIcon(FontAwesomeIcons.networkWired, color: Colors.white, size: 22,);
+  Icon contactIcon = Icon(CupertinoIcons.rectangle_stack_person_crop, color: Colors.white);
+  Icon chatIcon = Icon(CupertinoIcons.chat_bubble_text, color: Colors.white,);
+  Icon profileIcon = Icon(CupertinoIcons.person, color: Colors.white);
 
   List<Widget> pages = [
     HomeScreen(),
@@ -32,7 +37,6 @@ class _BottomNavBarState extends State<BottomNavBar> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: pages[_page],
-
       bottomNavigationBar: CurvedNavigationBar(
         index: _page,
         backgroundColor: Color(0xfff9d2cf).withOpacity(0.5),
@@ -44,45 +48,43 @@ class _BottomNavBarState extends State<BottomNavBar> {
 
         items: [
           CurvedNavigationBarItem(
-              child: Icon(Icons.home_outlined, color: Colors.white,),
+              child: homeIcon,
               label: 'Home',
+              labelStyle: TextStyle(color: Colors.white)),
+          CurvedNavigationBarItem(
+              child: networkIcon,
+              label: 'Network',
               labelStyle: TextStyle(
                   color: Colors.white
-              )
-          ),
+              ),
+              ),
           CurvedNavigationBarItem(
-            child: FaIcon(FontAwesomeIcons.networkWired, color: Colors.white, size: 20,),
-            label: 'Network',
-            labelStyle: TextStyle(
-                color: Colors.white
-            ),
-          ),
-          CurvedNavigationBarItem(
-              child: Icon(Icons.contacts, color: Colors.white,),
+              child: contactIcon,
               label: 'Contact',
-              labelStyle: TextStyle(
-                  color: Colors.white
-              )
-          ),
+              labelStyle: TextStyle(color: Colors.white)),
           CurvedNavigationBarItem(
-              child: Icon(Icons.chat_bubble_outline, color: Colors.white),
+              child: chatIcon,
               label: 'Chat',
-              labelStyle: TextStyle(
-                  color: Colors.white
-              )
-          ),
+              labelStyle: TextStyle(color: Colors.white)),
           CurvedNavigationBarItem(
-              child: Icon(Icons.perm_identity, color: Colors.white),
+              child: profileIcon,
               label: 'Profile',
-              labelStyle: TextStyle(
-                  color: Colors.white
-              )
-          ),
+              labelStyle: TextStyle(color: Colors.white)),
         ],
 
         onTap: (index) {
           setState(() {
             _page = index;
+
+            homeIcon = _page == 0 ? Icon(CupertinoIcons.house_fill, color: Colors.white) : Icon(CupertinoIcons.house, color: Colors.white);
+
+            networkIcon = _page == 1 ? FaIcon(FontAwesomeIcons.connectdevelop, color: Colors.white) : FaIcon(FontAwesomeIcons.networkWired, color: Colors.white, size: 22,);
+
+            contactIcon = _page == 2 ? Icon(CupertinoIcons.rectangle_stack_person_crop_fill, color: Colors.white) : Icon(CupertinoIcons.rectangle_stack_person_crop, color: Colors.white);
+
+            chatIcon = _page == 3 ? Icon(CupertinoIcons.chat_bubble_text_fill, color: Colors.white) : Icon(CupertinoIcons.chat_bubble_text, color: Colors.white);
+
+            profileIcon = _page == 4 ? Icon(CupertinoIcons.person_fill, color: Colors.white) : Icon(CupertinoIcons.person, color: Colors.white);
           });
         },
       ),

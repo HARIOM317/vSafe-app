@@ -21,6 +21,11 @@ class _RegisterUserState extends State<RegisterUser> {
   final _formData = Map<String, Object>();
   bool isLoading = false;
 
+  // function to disable back button
+  Future<bool> _onPop() async {
+    return false;
+  }
+
   // on submit function
   _onSubmit() async {
     _formKey.currentState!.save();
@@ -87,239 +92,243 @@ class _RegisterUserState extends State<RegisterUser> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        width: double.infinity,
-        height: double.infinity,
-        decoration: BoxDecoration(
-            gradient: LinearGradient(colors: [
-          Color(0xffdad4ec).withOpacity(0.75),
-          Color(0xffdad4ec).withOpacity(0.5),
-          Color(0xfff3e7e9).withOpacity(0.75)
-        ])),
-        child: Center(
-          child: SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Stack(
-                children: [
-                  isLoading
-                      ? progressIndicator(context)
-                      : SingleChildScrollView(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              // app icon
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Image.asset(
-                                  "assets/images/icon/logo.png",
-                                  width: 120,
-                                ),
-                              ),
+    return WillPopScope(
+      onWillPop: _onPop,
 
-                              // login text
-                              Padding(
-                                padding: const EdgeInsets.all(10.0),
-                                child: Text(
-                                  "User Registration",
-                                  style: TextStyle(
-                                      fontSize: 30,
-                                      fontFamily: 'Dosis-Regular',
-                                      color: Color(0xff401693),
-                                      fontWeight: FontWeight.bold
+      child: Scaffold(
+        body: Container(
+          width: double.infinity,
+          height: double.infinity,
+          decoration: BoxDecoration(
+              gradient: LinearGradient(colors: [
+            Color(0xffdad4ec).withOpacity(0.75),
+            Color(0xffdad4ec).withOpacity(0.5),
+            Color(0xfff3e7e9).withOpacity(0.75)
+          ])),
+          child: Center(
+            child: SafeArea(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Stack(
+                  children: [
+                    isLoading
+                        ? progressIndicator(context)
+                        : SingleChildScrollView(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                // app icon
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Image.asset(
+                                    "assets/images/icon/logo.png",
+                                    width: 120,
                                   ),
                                 ),
-                              ),
 
-                              // form
-                              Form(
-                                key: _formKey,
-                                child: Column(
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.only(
-                                          top: 8, left: 8, right: 8, bottom: 5),
-                                      child: CustomTextField(
-                                        hintText: "Name",
-                                        textInputAction: TextInputAction.next,
-                                        keyboardType: TextInputType.name,
-                                        prefix: Icon(Icons.person),
-                                        onSave: (name) {
-                                          _formData['name'] = name ?? "";
-                                        },
-                                        validate: (name) {
-                                          if (name!.isEmpty ||
-                                              name.length < 3) {
-                                            return "Incorrect name";
-                                          } else {
-                                            return null;
-                                          }
-                                        },
-                                      ),
+                                // login text
+                                Padding(
+                                  padding: const EdgeInsets.all(10.0),
+                                  child: Text(
+                                    "User Registration",
+                                    style: TextStyle(
+                                        fontSize: 30,
+                                        fontFamily: 'Dosis-Regular',
+                                        color: Color(0xff401693),
+                                        fontWeight: FontWeight.bold
                                     ),
+                                  ),
+                                ),
 
-                                    Padding(
-                                      padding: const EdgeInsets.only(
-                                          top: 5, left: 8, right: 8, bottom: 5),
-                                      child: CustomTextField(
-                                        hintText: "Phone",
-                                        textInputAction: TextInputAction.next,
-                                        keyboardType: TextInputType.phone,
-                                        prefix: Icon(Icons.phone),
-                                        onSave: (phone) {
-                                          _formData['phone'] = phone ?? "";
-                                        },
-                                        validate: (phone) {
-                                          if (phone!.isEmpty ||
-                                              phone.length != 10) {
-                                            return "Incorrect mobile number";
-                                          } else {
-                                            return null;
-                                          }
-                                        },
-                                      ),
-                                    ),
-
-                                    Padding(
-                                      padding: const EdgeInsets.only(
-                                          top: 5, left: 8, right: 8, bottom: 5),
-                                      child: CustomTextField(
-                                        hintText: "Email",
-                                        textInputAction: TextInputAction.next,
-                                        keyboardType:
-                                            TextInputType.emailAddress,
-                                        prefix: Icon(Icons.email),
-                                        onSave: (email) {
-                                          _formData['email'] = email ?? "";
-                                        },
-                                        validate: (email) {
-                                          if (email!.isEmpty ||
-                                              email.length < 8 ||
-                                              !email.contains("@") ||
-                                              email.contains(" ")) {
-                                            return "Invalid email address";
-                                          } else {
-                                            return null;
-                                          }
-                                        },
-                                      ),
-                                    ),
-
-                                    Padding(
-                                      padding: const EdgeInsets.only(
-                                          top: 5, left: 8, right: 8, bottom: 5),
-                                      child: CustomTextField(
-                                        hintText: "Password",
-                                        textInputAction: TextInputAction.next,
-                                        keyboardType:
-                                            TextInputType.visiblePassword,
-                                        prefix: Icon(Icons.lock_rounded),
-                                        onSave: (password) {
-                                          _formData['password'] =
-                                              password ?? "";
-                                        },
-                                        validate: (password) {
-                                          if (password!.isEmpty ||
-                                              password.length < 8 ||
-                                              password.contains(" ")) {
-                                            return "Password length should be more than 8 characters";
-                                          } else {
-                                            return null;
-                                          }
-                                        },
-                                        isPassword: isPasswordHide,
-                                        suffix: IconButton(
-                                          onPressed: () {
-                                            setState(() {
-                                              isPasswordHide = !isPasswordHide;
-                                            });
+                                // form
+                                Form(
+                                  key: _formKey,
+                                  child: Column(
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.only(
+                                            top: 8, left: 8, right: 8, bottom: 5),
+                                        child: CustomTextField(
+                                          hintText: "Name",
+                                          textInputAction: TextInputAction.next,
+                                          keyboardType: TextInputType.name,
+                                          prefix: Icon(Icons.person),
+                                          onSave: (name) {
+                                            _formData['name'] = name ?? "";
                                           },
-                                          icon: isPasswordHide
-                                              ? Icon(Icons.visibility_off)
-                                              : Icon(Icons.visibility),
+                                          validate: (name) {
+                                            if (name!.isEmpty ||
+                                                name.length < 3) {
+                                              return "Incorrect name";
+                                            } else {
+                                              return null;
+                                            }
+                                          },
                                         ),
                                       ),
-                                    ),
 
-                                    Padding(
-                                      padding: const EdgeInsets.only(
-                                          top: 5, left: 8, right: 8, bottom: 8),
-                                      child: CustomTextField(
-                                        hintText: "Confirm Password",
-                                        keyboardType:
-                                            TextInputType.visiblePassword,
-                                        prefix: Icon(Icons.lock_rounded),
-                                        onSave: (password) {
-                                          _formData['confirm_password'] =
-                                              password ?? "";
-                                        },
-                                        validate: (Confirm_password) {
-                                          if (Confirm_password!.isEmpty ||
-                                              Confirm_password.length < 8 ||
-                                              Confirm_password.contains(" ")) {
-                                            return "Password length should be more than 8 characters";
-                                          } else {
-                                            return null;
-                                          }
-                                        },
-                                        isPassword: isConfirmPasswordHide,
-                                        suffix: IconButton(
-                                          onPressed: () {
-                                            setState(() {
-                                              isConfirmPasswordHide =
-                                                  !isConfirmPasswordHide;
-                                            });
+                                      Padding(
+                                        padding: const EdgeInsets.only(
+                                            top: 5, left: 8, right: 8, bottom: 5),
+                                        child: CustomTextField(
+                                          hintText: "Phone",
+                                          textInputAction: TextInputAction.next,
+                                          keyboardType: TextInputType.phone,
+                                          prefix: Icon(Icons.phone),
+                                          onSave: (phone) {
+                                            _formData['phone'] = phone ?? "";
                                           },
-                                          icon: isConfirmPasswordHide
-                                              ? Icon(Icons.visibility_off)
-                                              : Icon(Icons.visibility),
+                                          validate: (phone) {
+                                            if (phone!.isEmpty ||
+                                                phone.length != 10) {
+                                              return "Incorrect mobile number";
+                                            } else {
+                                              return null;
+                                            }
+                                          },
                                         ),
                                       ),
-                                    ),
 
-                                    // login button
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: PrimaryButton(
-                                        title: "Register",
-                                        onPressed: () {
-                                          if (_formKey.currentState!
-                                              .validate()) {
-                                            _onSubmit();
-                                          }
-                                        },
+                                      Padding(
+                                        padding: const EdgeInsets.only(
+                                            top: 5, left: 8, right: 8, bottom: 5),
+                                        child: CustomTextField(
+                                          hintText: "Email",
+                                          textInputAction: TextInputAction.next,
+                                          keyboardType:
+                                              TextInputType.emailAddress,
+                                          prefix: Icon(Icons.email),
+                                          onSave: (email) {
+                                            _formData['email'] = email ?? "";
+                                          },
+                                          validate: (email) {
+                                            if (email!.isEmpty ||
+                                                email.length < 8 ||
+                                                !email.contains("@") ||
+                                                email.contains(" ")) {
+                                              return "Invalid email address";
+                                            } else {
+                                              return null;
+                                            }
+                                          },
+                                        ),
                                       ),
-                                    ),
-                                  ],
-                                ),
-                              ),
 
-                              // create new account button
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    const Text(
-                                      "Already have an account?",
-                                      style: TextStyle(
-                                          fontFamily: 'PTSans-Regular'),
-                                    ),
-                                    SecondaryButton(
-                                        title: "Sign in",
-                                        onPressed: () {
-                                          goTo(context, LoginScreen());
-                                        }),
-                                  ],
+                                      Padding(
+                                        padding: const EdgeInsets.only(
+                                            top: 5, left: 8, right: 8, bottom: 5),
+                                        child: CustomTextField(
+                                          hintText: "Password",
+                                          textInputAction: TextInputAction.next,
+                                          keyboardType:
+                                              TextInputType.visiblePassword,
+                                          prefix: Icon(Icons.lock_rounded),
+                                          onSave: (password) {
+                                            _formData['password'] =
+                                                password ?? "";
+                                          },
+                                          validate: (password) {
+                                            if (password!.isEmpty ||
+                                                password.length < 8 ||
+                                                password.contains(" ")) {
+                                              return "Password length should be more than 8 characters";
+                                            } else {
+                                              return null;
+                                            }
+                                          },
+                                          isPassword: isPasswordHide,
+                                          suffix: IconButton(
+                                            onPressed: () {
+                                              setState(() {
+                                                isPasswordHide = !isPasswordHide;
+                                              });
+                                            },
+                                            icon: isPasswordHide
+                                                ? Icon(Icons.visibility_off)
+                                                : Icon(Icons.visibility),
+                                          ),
+                                        ),
+                                      ),
+
+                                      Padding(
+                                        padding: const EdgeInsets.only(
+                                            top: 5, left: 8, right: 8, bottom: 8),
+                                        child: CustomTextField(
+                                          hintText: "Confirm Password",
+                                          keyboardType:
+                                              TextInputType.visiblePassword,
+                                          prefix: Icon(Icons.lock_rounded),
+                                          onSave: (password) {
+                                            _formData['confirm_password'] =
+                                                password ?? "";
+                                          },
+                                          validate: (Confirm_password) {
+                                            if (Confirm_password!.isEmpty ||
+                                                Confirm_password.length < 8 ||
+                                                Confirm_password.contains(" ")) {
+                                              return "Password length should be more than 8 characters";
+                                            } else {
+                                              return null;
+                                            }
+                                          },
+                                          isPassword: isConfirmPasswordHide,
+                                          suffix: IconButton(
+                                            onPressed: () {
+                                              setState(() {
+                                                isConfirmPasswordHide =
+                                                    !isConfirmPasswordHide;
+                                              });
+                                            },
+                                            icon: isConfirmPasswordHide
+                                                ? Icon(Icons.visibility_off)
+                                                : Icon(Icons.visibility),
+                                          ),
+                                        ),
+                                      ),
+
+                                      // login button
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: PrimaryButton(
+                                          title: "Register",
+                                          onPressed: () {
+                                            if (_formKey.currentState!
+                                                .validate()) {
+                                              _onSubmit();
+                                            }
+                                          },
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                              )
-                            ],
+
+                                // create new account button
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: [
+                                      const Text(
+                                        "Already have an account?",
+                                        style: TextStyle(
+                                            fontFamily: 'PTSans-Regular'),
+                                      ),
+                                      SecondaryButton(
+                                          title: "Sign in",
+                                          onPressed: () {
+                                            goTo(context, LoginScreen());
+                                          }),
+                                    ],
+                                  ),
+                                )
+                              ],
+                            ),
                           ),
-                        ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),

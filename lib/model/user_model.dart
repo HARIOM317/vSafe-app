@@ -17,3 +17,20 @@ class UserModel {
     };
   }
 }
+
+
+class MyUserModal {
+  String? name;
+  String? phone;
+  String? email;
+  String? type;
+
+  MyUserModal();
+
+  MyUserModal.fromJson(Map<String, dynamic> json){
+    name = json['name'];
+    phone = json['phone'];
+    email = json['email'];
+    type = json['type'];
+  }
+}

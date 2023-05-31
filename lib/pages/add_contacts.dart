@@ -86,29 +86,36 @@ class _AddContactsScreenState extends State<AddContactsScreen> {
                   // shrinkWrap: true,
                   itemCount: count,
                   itemBuilder: (BuildContext context, int index) {
-                    return Card(
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: ListTile(
-                          title: Text(contactList![index].name),
-                          trailing: Container(
-                            width: 100,
-                            child: Row(
-                              children: [
-                                IconButton(
-                                  onPressed: () async {
-                                    await FlutterPhoneDirectCaller.callNumber(contactList![index].number);
-                                  },
-                                  icon: Icon(Icons.call, color: Colors.green[900],),
-                                ),
+                    return Container(
+                      margin: EdgeInsets.symmetric(horizontal: 5),
+                      child: Card(
+                        elevation: 4,
+                        color: Color(0xffdcdfff),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
 
-                                IconButton(
-                                  onPressed: () {
-                                    deleteContact(contactList![index]);
-                                  },
-                                  icon: Icon(Icons.delete, color: Colors.red[900],),
-                                ),
-                              ],
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: ListTile(
+                            title: Text(contactList![index].name),
+                            trailing: Container(
+                              width: 100,
+                              child: Row(
+                                children: [
+                                  IconButton(
+                                    onPressed: () async {
+                                      await FlutterPhoneDirectCaller.callNumber(contactList![index].number);
+                                    },
+                                    icon: Icon(Icons.call, color: Colors.green[900],),
+                                  ),
+
+                                  IconButton(
+                                    onPressed: () {
+                                      deleteContact(contactList![index]);
+                                    },
+                                    icon: Icon(Icons.delete, color: Colors.red[900],),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         ),

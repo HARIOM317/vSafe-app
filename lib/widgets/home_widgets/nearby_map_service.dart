@@ -49,15 +49,18 @@ class NearbyMapService extends StatelessWidget{
       height: 100,
       width: MediaQuery.of(context).size.width,
       child: Center(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            NearbyPoliceStation(onMapFunction: openMap,),
-            NearbyHospital(onMapFunction: openMap),
-            NearbyPharmacy(onMapFunction: openMap),
-            NearbyBusStation(onMapFunction: openMap),
-          ],
+        child: SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              NearbyPoliceStation(onMapFunction: openMap,),
+              NearbyHospital(onMapFunction: openMap),
+              NearbyPharmacy(onMapFunction: openMap),
+              NearbyBusStation(onMapFunction: openMap),
+            ],
+          ),
         ),
       ),
     );
