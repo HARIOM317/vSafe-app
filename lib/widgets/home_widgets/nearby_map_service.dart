@@ -12,12 +12,12 @@ Widget createNearbyWidget(String path, String text){
       child: Column(
         children: [
           Card(
-            color: Color(0xffddd6f3),
+            color: const Color(0xffddd6f3),
             elevation: 3,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(20),
             ),
-            child: Container(
+            child: SizedBox(
               height: 55,
               width: 55,
               child: Center(
@@ -25,7 +25,7 @@ Widget createNearbyWidget(String path, String text){
               ),
             ),
           ),
-          Text(text, style: TextStyle(fontFamily: 'PTSans-Regular', fontSize: 12, fontWeight: FontWeight.bold),)
+          Text(text, style: const TextStyle(fontFamily: 'PTSans-Regular', fontSize: 11, fontWeight: FontWeight.bold), textAlign: TextAlign.center,)
         ],
       ),
     ),
@@ -33,6 +33,8 @@ Widget createNearbyWidget(String path, String text){
 }
 
 class NearbyMapService extends StatelessWidget{
+  const NearbyMapService({super.key});
+
   static Future<void> openMap(String location) async{
     String googleUrl = "https://www.google.com/maps/search/$location";
     final Uri _url = Uri.parse(googleUrl);
@@ -45,8 +47,8 @@ class NearbyMapService extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 100,
+    return SizedBox(
+      height: 110,
       width: MediaQuery.of(context).size.width,
       child: Center(
         child: SingleChildScrollView(

@@ -1,10 +1,10 @@
 import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_advanced_drawer/flutter_advanced_drawer.dart';
-import 'package:v_safe/pages/profile_screen.dart';
 import 'package:v_safe/user/login_screen.dart';
 import 'package:v_safe/user/update_user_profile.dart';
 import 'package:v_safe/utils/constants.dart';
@@ -15,7 +15,7 @@ import 'package:v_safe/widgets/drawer_widgets/history_page.dart';
 import 'package:v_safe/widgets/drawer_widgets/notification_page.dart';
 import 'package:v_safe/widgets/drawer_widgets/privacy_policy_page.dart';
 import 'package:v_safe/widgets/drawer_widgets/setting_page.dart';
-import 'package:v_safe/widgets/drawer_widgets/share_page.dart';
+import 'package:share_plus/share_plus.dart';
 
 class DrawerScreen extends StatefulWidget {
   const DrawerScreen({super.key});
@@ -30,7 +30,6 @@ class _DrawerScreenState extends State<DrawerScreen> {
   final key = GlobalKey<FormState>();
   String? id;
   String? profilePic;
-  String? downloadUrl;
   bool isSaving = false;
 
   TextEditingController nameController = TextEditingController();
@@ -65,34 +64,12 @@ class _DrawerScreenState extends State<DrawerScreen> {
   @override
   void initState() {
     super.initState();
-    getUserName();
-    getData();
-  }
 
-  // final key = GlobalKey<FormState>();
-  // String? id;
-  // TextEditingController nameController = TextEditingController();
-  //
-  //
-  // getName() async {
-  //   await FirebaseFirestore.instance
-  //       .collection('users')
-  //       .where('id', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
-  //       .get()
-  //       .then((value) {
-  //     nameController.text = value.docs.first['name'];
-  //     id = value.docs.first.id;
-  //   });
-  // }
-  //
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   getName();
-  //   // setState(() {
-  //   //   getName();
-  //   // });
-  // }
+    setState(() {
+      getUserName();
+      getData();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -113,14 +90,14 @@ class _DrawerScreenState extends State<DrawerScreen> {
         ),
       ),
       controller: _advancedDrawerController,
-      animationCurve: Curves.easeInOut,
-      animationDuration: const Duration(milliseconds: 300),
+      animationCurve: Curves.linear,
+      animationDuration: const Duration(milliseconds: 250),
       animateChildDecoration: true,
       rtlOpening: false,
       // openScale: 1.0,
       disabledGestures: false,
       childDecoration: const BoxDecoration(
-        borderRadius: const BorderRadius.all(Radius.circular(16)),
+        borderRadius: const BorderRadius.all(Radius.circular(30)),
       ),
 
       drawer: SafeArea(
@@ -129,70 +106,39 @@ class _DrawerScreenState extends State<DrawerScreen> {
           iconColor: Colors.white,
           child: ListView(
             children: [
-              // Container(
-              //   margin: EdgeInsets.only(top: 10),
-              //   decoration: BoxDecoration(
-              //       shape: BoxShape.circle,
-              //       color: Colors.white,
-              //       border: Border.all(
-              //           width: 3, color: Colors.white)),
-              //   child: profilePic == null
-              //       ? CircleAvatar(
-              //     child: Icon(
-              //       Icons.person,
-              //       size: 100,
-              //     ),
-              //     radius: 75,
-              //   )
-              //       : profilePic!.contains('http')
-              //       ? CircleAvatar(
-              //     radius: 75,
-              //     backgroundImage:
-              //     NetworkImage(profilePic!),
-              //   )
-              //       : CircleAvatar(
-              //     radius: 75,
-              //     backgroundImage:
-              //     FileImage(File(profilePic!)),
-              //   ),
-              // ),
-
-              // profile
-              GestureDetector(
-                onTap: (){
-                  goTo(context, UpdateUserProfile());
-                },
-                child: Container(
-                  width: 128.0,
-                  height: 128.0,
-                  margin: const EdgeInsets.only(
-                    top: 24.0,
-                    // bottom: 64.0,
-                  ),
-                  clipBehavior: Clip.antiAlias,
-                  decoration: BoxDecoration(
-                    color: Colors.black26,
-                    shape: BoxShape.circle,
-                    border: Border.all(width: 2, color: Colors.white)
-                  ),
-                  child: profilePic == null
-                      ? CircleAvatar(
-                          child: Icon(
-                            Icons.person,
-                            size: 100,
-                          ),
-                          radius: 75,
-                        )
-                      : profilePic!.contains('http')
+              Stack(
+                alignment: Alignment.center,
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      goTo(context, UpdateUserProfile());
+                    },
+                    child: Container(
+                      margin: EdgeInsets.only(top: 30),
+                      decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Colors.white,
+                          border: Border.all(width: 1, color: Colors.white)),
+                      child: profilePic == null
                           ? CircleAvatar(
-                              radius: 75,
-                              backgroundImage: NetworkImage(profilePic!),
+                              child: Icon(
+                                Icons.person,
+                                size: 80,
+                              ),
+                              radius: 55,
                             )
-                          : CircleAvatar(
-                              radius: 75,
-                              backgroundImage: FileImage(File(profilePic!)),
-                            ),
-                ),
+                          : profilePic!.contains('http')
+                              ? CircleAvatar(
+                                  radius: 55,
+                                  backgroundImage: NetworkImage(profilePic!),
+                                )
+                              : CircleAvatar(
+                                  radius: 55,
+                                  backgroundImage: FileImage(File(profilePic!)),
+                                ),
+                    ),
+                  ),
+                ],
               ),
 
               Container(
@@ -256,9 +202,8 @@ class _DrawerScreenState extends State<DrawerScreen> {
 
               // share button
               ListTile(
-                onTap: () {
-                  Navigator.of(context).push(
-                      MaterialPageRoute(builder: (context) => SharePage()));
+                onTap: () async{
+                  await Share.share('https://github.com/HARIOM317/vSafe-app');
                 },
                 leading: Icon(Icons.share),
                 title: Text('Share'),
@@ -276,9 +221,50 @@ class _DrawerScreenState extends State<DrawerScreen> {
 
               // logout button
               ListTile(
-                onTap: () {
-                  Navigator.of(context).push(
-                      MaterialPageRoute(builder: (context) => LoginScreen()));
+                onTap: () async {
+                  showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          elevation: 10,
+                          shadowColor: Colors.deepPurple.withOpacity(0.25),
+                          backgroundColor: Colors.deepPurple[100],
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.all(Radius.circular(32.0))
+                          ),
+                          title: Row(
+                            children: [
+                              Padding(
+                                  padding: EdgeInsets.all(8.0),
+                                child: Icon(Icons.logout, color: Color(0xff6a1010), size: 30,),
+                              ),
+
+                              Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: Text("Sign out", style: TextStyle(color: Color(0xff6a1010)),),
+                              )
+                            ],
+                          ),
+
+                          content: Text("Do you really want to sign out?"),
+
+                          actions: [
+                            TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                child: Text("Cancel", style: TextStyle(color: Colors.green[900]),)
+                            ),
+
+                            TextButton(
+                                onPressed: () async {
+                                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginScreen()));
+                                },
+                                child: Text("Ok", style: TextStyle(color: Color(0xff6a1010)),))
+                          ],
+                        );
+                      }
+                  );
                 },
                 leading: Icon(Icons.logout),
                 title: Text('Logout'),

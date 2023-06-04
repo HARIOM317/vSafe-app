@@ -46,10 +46,13 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: ListView(shrinkWrap: true, children: [
                       sectionHeading("Tips"),
                       CustomCarousel(),
+
                       sectionHeading("Explore Nearby"),
                       NearbyMapService(),
+
                       sectionHeading("Situation"),
                       Situation(),
+
                       sectionHeading("Emergency Helplines"),
                       Emergency(),
                     ]),

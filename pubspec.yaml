@@ -46,8 +46,9 @@ dependencies:
   url_launcher: ^6.1.11
   fluttertoast: ^8.2.1
   curved_labeled_navigation_bar: ^2.0.2
-  firebase_core: ^2.13.0
+  get: ^4.6.5
   firebase_auth: ^4.6.1
+  firebase_core: ^2.13.0
   cloud_firestore: ^4.7.1
   email_auth: ^1.0.0
   shared_preferences: ^2.1.1
@@ -62,7 +63,10 @@ dependencies:
   uuid: ^3.0.7
   firebase_storage: ^11.2.2
   cached_network_image: ^3.2.3
-
+  liquid_pull_to_refresh: ^3.0.1
+  share_plus: ^7.0.2
+  auth: ^8.2.0+2
+  awesome_dialog: ^3.1.0
   provider: ^6.0.5
   background_sms: ^0.0.4
   geolocator: ^9.0.2

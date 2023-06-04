@@ -1,8 +1,6 @@
 import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -11,8 +9,6 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:uuid/uuid.dart';
 import 'package:v_safe/components/primary_button.dart';
-import 'package:v_safe/utils/constants.dart';
-import 'package:v_safe/widgets/drawer_widgets/screen_drawer.dart';
 
 class UpdateUserProfile extends StatefulWidget {
   @override
@@ -25,6 +21,7 @@ class _UpdateUserProfile extends State<UpdateUserProfile> {
   String? profilePic;
   String? downloadUrl;
   bool isSaving = false;
+  bool isValidNumber = false;
 
   TextEditingController nameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
@@ -111,11 +108,12 @@ class _UpdateUserProfile extends State<UpdateUserProfile> {
           ),
         ),
       ),
+      
       body: Container(
         width: double.infinity,
         height: double.infinity,
         decoration: BoxDecoration(
-          color: Color(0xfff9d2cf).withOpacity(0.5),
+          gradient: LinearGradient(colors: [Color(0xfffdcbf1).withOpacity(0.5), Color(0xffe6dee9)], begin: Alignment.topLeft, end: Alignment.bottomRight),
         ),
         child: SafeArea(
           child: isSaving == true
@@ -127,7 +125,7 @@ class _UpdateUserProfile extends State<UpdateUserProfile> {
                       key: key,
                       child: SingleChildScrollView(
                         child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
                             Container(
                               padding: EdgeInsets.all(10),
@@ -140,7 +138,6 @@ class _UpdateUserProfile extends State<UpdateUserProfile> {
                                     fontWeight: FontWeight.bold),
                               ),
                             ),
-
                             Stack(
                               children: [
                                 Container(
@@ -152,56 +149,40 @@ class _UpdateUserProfile extends State<UpdateUserProfile> {
                                           width: 3, color: Colors.white)),
                                   child: profilePic == null
                                       ? CircleAvatar(
-                                    child: Icon(
-                                      Icons.person,
-                                      size: 100,
-                                    ),
-                                    radius: 75,
-                                  )
+                                          child: Icon(
+                                            Icons.person,
+                                            size: 100,
+                                          ),
+                                          radius: 75,
+                                        )
                                       : profilePic!.contains('http')
-                                      ? CircleAvatar(
-                                    radius: 75,
-                                    backgroundImage:
-                                    NetworkImage(profilePic!),
-                                  )
-                                      : CircleAvatar(
-                                    radius: 75,
-                                    backgroundImage:
-                                    FileImage(File(profilePic!)),
-                                  ),
+                                          ? CircleAvatar(
+                                              radius: 75,
+                                              backgroundImage:
+                                                  NetworkImage(profilePic!),
+                                            )
+                                          : CircleAvatar(
+                                              radius: 75,
+                                              backgroundImage:
+                                                  FileImage(File(profilePic!)),
+                                            ),
                                 ),
-
                                 Positioned(
                                     bottom: 0,
                                     right: 0,
                                     child: GestureDetector(
                                       onTap: () async {
-                                        final XFile? pickImage = await ImagePicker()
-                                            .pickImage(
-                                            source: ImageSource.gallery,
-                                            imageQuality: 50);
+                                        final XFile? pickImage =
+                                            await ImagePicker().pickImage(
+                                                source: ImageSource.gallery,
+                                                imageQuality: 50);
 
                                         if (pickImage != null) {
                                           setState(() {
                                             profilePic = pickImage.path;
                                           });
                                         }
-
-                                        // update image on firebase
-                                        if (key.currentState!.validate()) {
-                                          // close keyboard if open
-                                          SystemChannels.textInput
-                                              .invokeMethod('TextInput.hide');
-
-                                          profilePic == null
-                                              ? Fluttertoast.showToast(
-                                              msg:
-                                              "Please select an profile picture!")
-                                              : update();
-                                        }
-
                                       },
-
                                       child: Container(
                                         height: 55,
                                         width: 55,
@@ -218,13 +199,12 @@ class _UpdateUserProfile extends State<UpdateUserProfile> {
                                           color: Colors.white,
                                         ),
                                       ),
-                                    )
-                                ),
+                                    )),
                               ],
                             ),
-
                             Padding(
-                              padding: const EdgeInsets.only(top: 50, bottom: 5),
+                              padding:
+                                  const EdgeInsets.only(top: 50, bottom: 5),
                               child: TextFormField(
                                 enabled: true,
                                 controller: nameController,
@@ -257,10 +237,12 @@ class _UpdateUserProfile extends State<UpdateUserProfile> {
                                 enabled: true,
                                 controller: contactController,
                                 validator: (v) {
-                                  if (v!.isEmpty) {
-                                    return "Contact Number";
-                                  } else {
+                                  if (v!.length == 10) {
+                                    isValidNumber = true;
                                     return null;
+                                  } else {
+                                    Fluttertoast.showToast(msg: "Invalid mobile number");
+                                    return "Incorrect Mobile Number";
                                   }
                                 },
                                 decoration: InputDecoration(
@@ -310,21 +292,61 @@ class _UpdateUserProfile extends State<UpdateUserProfile> {
                               child: PrimaryButton(
                                   title: "UPDATE PROFILE",
                                   onPressed: () async {
-                                    await FirebaseFirestore.instance
-                                        .collection('users')
-                                        .doc(id)
-                                        .update({
-                                      'name': nameController.text
-                                    }).then((value) => Fluttertoast.showToast(
-                                            msg: "Profile Updated"));
+                                    bool? updateProfile = await showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return AlertDialog(
+                                            elevation: 10,
+                                            shadowColor: Colors.deepPurple.withOpacity(0.25),
+                                            backgroundColor: Colors.deepPurple[100],
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.all(Radius.circular(32.0)),
+                                            ),
+                                            title: const Text('Confirm'),
+                                            content: const Text(
+                                                'Are you sure to update your profile?'),
+                                            actions: <Widget>[
+                                              TextButton(
+                                                  onPressed: () {
+                                                    Navigator.of(context).pop(false);
+                                                    Fluttertoast.showToast(msg: "Cancel to Updated Profile");
+                                                  },
+                                                  child: const Text("No")),
+                                              TextButton(
+                                                  onPressed: () async {
+                                                    Navigator.of(context).pop(true);
 
-                                    await FirebaseFirestore.instance
-                                        .collection('users')
-                                        .doc(id)
-                                        .update({
-                                      'phone': contactController.text
-                                    }).then((value) => Fluttertoast.showToast(
-                                            msg: "Successfully!"));
+                                                    // todo: updating profile
+                                                    // update name on firebase
+                                                    await FirebaseFirestore
+                                                        .instance
+                                                        .collection('users')
+                                                        .doc(id)
+                                                        .update({
+                                                      'name':
+                                                          nameController.text
+                                                    });
+
+                                                    // update mobile number if it is valid
+                                                    if(contactController.text.length == 10){
+                                                      updateMobileNumber();
+                                                    }
+
+                                                    // update image on firebase
+                                                    if (key.currentState!
+                                                        .validate()) {
+                                                      profilePic == null
+                                                          ? Fluttertoast.showToast(msg: "Please select an profile picture!")
+                                                          : update();
+                                                    }
+                                                    Fluttertoast.showToast(msg: "Profile Updated Successfully");
+                                                  },
+                                                  child: const Text("Yes")),
+                                            ],
+                                          );
+                                        });
+
+                                    return updateProfile ?? false;
                                   }),
                             )
                           ],
@@ -372,6 +394,18 @@ class _UpdateUserProfile extends State<UpdateUserProfile> {
 
     setState(() {
       isSaving = false;
+    });
+  }
+
+  updateMobileNumber() async {
+    // update phone number on firebase
+    await FirebaseFirestore
+        .instance
+        .collection('users')
+        .doc(id)
+        .update({
+      'phone':
+      contactController.text
     });
   }
 }

@@ -1,5 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:v_safe/db/share_pref.dart';
 import 'package:v_safe/pages/intro_pages/splash_screen.dart';
@@ -19,6 +21,11 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    // stop auto rotation
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+    ]);
+
     return MaterialApp(
       title: 'vSafe',
       debugShowCheckedModeBanner: false,
@@ -29,6 +36,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.deepPurple,
       ),
 
+      // todo ----------------------------------------------------------
       home: FutureBuilder(
           future: MySharedPreference.getUserType(),
           builder: (BuildContext context, AsyncSnapshot snapshot) {
@@ -41,21 +49,23 @@ class MyApp extends StatelessWidget {
             return progressIndicator(context);
           }),
 
+      // todo ----------------------------------------------------------
+
+
+      // home: StreamBuilder(
+      //     stream: FirebaseAuth.instance.authStateChanges(),
+      //     builder: (BuildContext context, AsyncSnapshot snapshot) {
+      //       if (snapshot.data == "") {
+      //         return SplashScreen();
+      //       }
+      //       if (snapshot.data == "user") {
+      //         return MainSplashScreen();
+      //       }
+      //       return progressIndicator(context);
+      //     }),
+
+
+
     );
   }
 }
-
-// class CheckAuth extends StatelessWidget {
-//   checkUserAuth() {
-//     if(MySharedPreference.getUserType() == 'user'){
-
-//     }
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-
-//     );
-//   }
-// }

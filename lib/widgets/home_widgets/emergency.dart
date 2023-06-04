@@ -8,7 +8,7 @@ _callNumber(String number) async{
 }
 
 // function to create emergency number card
-Widget emergencyCard(String imagePath, String emergencyNumber, String helplineName, String helplineService, {var helplineNameFontSize = 25.0, var emergencyNumberFontSize = 20.0, var emergencyNumberBGWidth = 70.0}) {
+Widget emergencyCard(String imagePath, String emergencyNumber, String helplineName, String helplineService, {var helplineNameFontSize = 25.0, var emergencyNumberFontSize = 20.0, var emergencyNumberBGWidth = 80.0}) {
   return Card(
     elevation: 3,
     color: Colors.white,
@@ -20,7 +20,7 @@ Widget emergencyCard(String imagePath, String emergencyNumber, String helplineNa
       },
       child: Container(
         margin: EdgeInsets.all(0.5),
-        width: 215,
+        width: 225,
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
             gradient: LinearGradient(
@@ -38,7 +38,7 @@ Widget emergencyCard(String imagePath, String emergencyNumber, String helplineNa
               // for image and emergency number
               Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   CircleAvatar(
                     radius: 30,
@@ -51,7 +51,7 @@ Widget emergencyCard(String imagePath, String emergencyNumber, String helplineNa
 
                   Container(
                     margin: EdgeInsets.all(5.0),
-                    height: 30,
+                    height: 40,
                     width: emergencyNumberBGWidth,
                     decoration: BoxDecoration(
                         color: Colors.white.withOpacity(0.7),
@@ -71,6 +71,7 @@ Widget emergencyCard(String imagePath, String emergencyNumber, String helplineNa
                               fontSize: emergencyNumberFontSize,
                               fontFamily: 'EBGaramond-Regular'
                             ),
+                            textAlign: TextAlign.center,
                           ),
                         ),
                       ],
@@ -131,7 +132,7 @@ class Emergency extends StatelessWidget {
         children: [
           Container(
             width: MediaQuery.of(context).size.width,
-            height: 150,
+            height: 160,
             child: ListView(
               physics: const BouncingScrollPhysics(),
               scrollDirection: Axis.horizontal,
@@ -231,7 +232,7 @@ class ChildHelpLine extends StatelessWidget {
 class NCWHelpLine extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return emergencyCard("assets/images/emergency_numbers/ncw.png", "7827-170-170", "NCW", "(National Commission for Women)", emergencyNumberFontSize: 15.0, emergencyNumberBGWidth: 110.0);
+    return emergencyCard("assets/images/emergency_numbers/ncw.png", "7827-170-170", "NCW", "(National Commission for Women)", emergencyNumberFontSize: 14.0, emergencyNumberBGWidth: 130.0);
   }
 }
 

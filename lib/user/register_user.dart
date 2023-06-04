@@ -26,6 +26,18 @@ class _RegisterUserState extends State<RegisterUser> {
     return false;
   }
 
+  // final _auth = FirebaseAuth.instance;
+  //
+  // Future<void> sendEmailVerification() async{
+  //   try{
+  //     _auth.currentUser!.sendEmailVerification();
+  //   } on FirebaseAuthException catch(e){
+  //     showAlertDialogueBox(context, e.message.toString());
+  //   } catch(e){
+  //     showAlertDialogueBox(context, "Something went wrong!");
+  //   }
+  // }
+
   // on submit function
   _onSubmit() async {
     _formKey.currentState!.save();

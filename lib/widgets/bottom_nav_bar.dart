@@ -43,8 +43,8 @@ class _BottomNavBarState extends State<BottomNavBar> {
         buttonBackgroundColor: Color(0xff4b51a8),
         color: Colors.indigoAccent,
         animationDuration: Duration(milliseconds: 500),
-        // height: 75,
-        // animationCurve: Curves.linear,
+        height: 65,
+        animationCurve: Curves.linear,
 
         items: [
           CurvedNavigationBarItem(

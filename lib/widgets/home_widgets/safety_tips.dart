@@ -34,7 +34,6 @@ Widget aboutTip(String text){
     padding: EdgeInsets.all(10),
     child: Center(
         child: Text(text, style: TextStyle(
-
           fontFamily: 'EBGaramond-Regular',
           fontSize: 16,
           fontStyle: FontStyle.italic,
@@ -177,7 +176,7 @@ class VideoPlayerWidget extends StatefulWidget {
 class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
   late VideoPlayerController _controller;
   late Future<void> _initializeVideoPlayerFuture;
-  var myOpacity = 0.3;
+  var myOpacity = 0.5;
   Color buttonColor = Colors.white;
   LinearGradient buttonGradient = LinearGradient(colors: [Colors.black54.withOpacity(1.0), Colors.black26.withOpacity(1.0)]);
   var marginValue = 20.0;
@@ -188,7 +187,7 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
     _controller = VideoPlayerController.asset(widget.videoPath);
     _initializeVideoPlayerFuture = _controller.initialize();
     _controller.setLooping(true);
-    _controller.setPlaybackSpeed(0.75);
+    _controller.setPlaybackSpeed(1.10);
   }
 
   @override
@@ -245,7 +244,7 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
                           // If the video is playing, pause it.
                           if (_controller.value.isPlaying) {
                             _controller.pause();
-                            myOpacity = 0.3;
+                            myOpacity = 0.5;
                             marginValue = 20;
                             buttonColor = Colors.white;
                             buttonGradient = LinearGradient(colors: [Colors.black54.withOpacity(1.0), Colors.black26.withOpacity(1.0)]);

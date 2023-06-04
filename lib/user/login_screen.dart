@@ -7,7 +7,7 @@ import 'package:v_safe/components/primary_button.dart';
 import 'package:v_safe/components/secondary_button.dart';
 import 'package:v_safe/db/share_pref.dart';
 import 'package:v_safe/pages/main_splash_screen.dart';
-import 'package:v_safe/user/forgot_password_page.dart';
+import 'package:v_safe/user/authentication/forgot_password_page.dart';
 import 'package:v_safe/user/register_user.dart';
 import 'package:v_safe/utils/constants.dart';
 
