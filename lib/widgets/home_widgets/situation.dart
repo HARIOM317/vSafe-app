@@ -16,6 +16,14 @@ class Situation extends StatefulWidget {
 }
 
 class _SituationState extends State<Situation> {
+  // variables for panic button
+  double buttonRadius = 35;
+  double shadowRadius = 30;
+  Color shadowColor = Colors.white.withOpacity(0.5);
+  Color buttonBG = Colors.white.withOpacity(0.5);
+  Color iconColor = Color(0xffcc1840);
+  Color textColor = Color(0xffcc1840);
+
   Position? _currentPosition;
   String? _currentAddress;
   LocationPermission? locationPermission;
@@ -44,7 +52,7 @@ class _SituationState extends State<Situation> {
         _getAddressFromLatLong();
       });
     }).catchError((e) {
-      Fluttertoast.showToast(msg: "Something went wrong!");
+      Fluttertoast.showToast(msg: e.toString());
     });
   }
 
@@ -116,6 +124,15 @@ class _SituationState extends State<Situation> {
                   // Panic Button
                   GestureDetector(
                     onTap: (){
+                      setState(() {
+                          buttonRadius = 40;
+                          buttonBG = Color(0xffff5722);
+                          iconColor = Colors.white;
+                          textColor = Colors.white;
+                          shadowColor = Colors.deepOrange.withOpacity(0.5);
+                          shadowRadius = 50;
+                      });
+
                       showDialog(
                           context: context,
                           builder: (BuildContext context) {
@@ -146,6 +163,14 @@ class _SituationState extends State<Situation> {
                                 TextButton(
                                     onPressed: () {
                                       Navigator.pop(context);
+                                      setState(() {
+                                        buttonRadius = 35;
+                                        shadowRadius = 30;
+                                        shadowColor = Colors.white.withOpacity(0.5);
+                                        buttonBG = Colors.white.withOpacity(0.5);
+                                        iconColor = Color(0xffcc1840);
+                                        textColor = Color(0xffcc1840);
+                                      });
                                     },
                                     child: Text("Cancel", style: TextStyle(color: Colors.green[900]),)
                                 ),
@@ -175,6 +200,14 @@ class _SituationState extends State<Situation> {
                                       else{
                                         Fluttertoast.showToast(msg: "Something went wrong!");
                                       }
+                                      setState(() {
+                                        buttonRadius = 35;
+                                        shadowRadius = 30;
+                                        shadowColor = Colors.white.withOpacity(0.5);
+                                        buttonBG = Colors.white.withOpacity(0.5);
+                                        iconColor = Color(0xffcc1840);
+                                        textColor = Color(0xffcc1840);
+                                      });
                                     },
                                     child: const Text("Send", style: TextStyle(color: Color(0xff6a1010)),))
                               ],
@@ -184,6 +217,15 @@ class _SituationState extends State<Situation> {
                     },
 
                     onLongPress: () {
+                      setState(() {
+                        buttonRadius = 40;
+                        buttonBG = Color(0xffff5722);
+                        iconColor = Colors.white;
+                        textColor = Colors.white;
+                        shadowColor = Colors.deepOrange.withOpacity(0.5);
+                        shadowRadius = 50;
+                      });
+
                       showDialog(
                           context: context,
                           builder: (BuildContext context) {
@@ -214,6 +256,14 @@ class _SituationState extends State<Situation> {
                                 TextButton(
                                     onPressed: () {
                                       Navigator.pop(context);
+                                      setState(() {
+                                        buttonRadius = 35;
+                                        shadowRadius = 30;
+                                        shadowColor = Colors.white.withOpacity(0.5);
+                                        buttonBG = Colors.white.withOpacity(0.5);
+                                        iconColor = Color(0xffcc1840);
+                                        textColor = Color(0xffcc1840);
+                                      });
                                     },
                                     child: Text("Cancel", style: TextStyle(color: Colors.green[900]),)
                                 ),
@@ -243,6 +293,14 @@ class _SituationState extends State<Situation> {
                                       else{
                                         Fluttertoast.showToast(msg: "Something went wrong!");
                                       }
+                                      setState(() {
+                                        buttonRadius = 35;
+                                        shadowRadius = 30;
+                                        shadowColor = Colors.white.withOpacity(0.5);
+                                        buttonBG = Colors.white.withOpacity(0.5);
+                                        iconColor = Color(0xffcc1840);
+                                        textColor = Color(0xffcc1840);
+                                      });
                                     },
                                     child: const Text("Send", style: TextStyle(color: Color(0xff6a1010)),))
                               ],
@@ -256,25 +314,32 @@ class _SituationState extends State<Situation> {
                           borderRadius: BorderRadius.circular(100),
                           boxShadow: [
                             BoxShadow(
-                                blurRadius: 30,
+                                blurRadius: shadowRadius,
+                                // blurRadius: 50,
                                 offset: const Offset(0, 2),
-                                color: Colors.white.withOpacity(0.5))
+                                color: shadowColor
+                                // color: Colors.deepOrange.withOpacity(0.5)
+                            )
                           ]),
                       child: CircleAvatar(
-                        radius: 35,
-                        backgroundColor: Colors.white.withOpacity(0.5),
+                        radius: buttonRadius,
+                        // radius: 40,
+                        backgroundColor: buttonBG,
+                        // backgroundColor: Colors.deepOrange[500],
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Icon(
                               Icons.emergency_share_sharp,
-                              color: Color(0xffcc1840),
+                              color: iconColor,
+                              // color: Colors.white,
                             ),
                             Text(
                               "SOS",
                               style: TextStyle(
-                                  color: Color(0xffcc1840),
+                                  color: textColor,
+                                  // color: Colors.white,
                                   fontFamily: 'NovaSlim-Regular',
                                   fontWeight: FontWeight.bold,
                                   fontSize: 22),
