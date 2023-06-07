@@ -17,24 +17,23 @@ class TContactModel {
   }
 
   // setter
-  set number(String newNumber) => this._number = newNumber;
-  set name(String newName) => this._name = newName;
+  set number(String newNumber) => _number = newNumber;
+  set name(String newName) => _name = newName;
 
   // convert a Contact object to a map object
   Map<String, dynamic> toMap() {
-    var map = new Map<String, dynamic>();
+    var map = <String, dynamic>{};
 
-    map['id'] = this._id;
-    map['number'] = this._number;
-    map['name'] = this._name;
+    map['id'] = _id;
+    map['number'] = _number;
+    map['name'] = _name;
 
     return map;
   }
 
   TContactModel.fromMapObject(Map<String, dynamic> map) {
-    this._id = map['id'];
-    this._number = map['number'];
-    this._name = map['name'];
+    _id = map['id'];
+    _number = map['number'];
+    _name = map['name'];
   }
-
 }

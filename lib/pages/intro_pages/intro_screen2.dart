@@ -13,7 +13,7 @@ class IntroPage2 extends StatelessWidget {
           gradient: LinearGradient(
               begin: Alignment.topRight,
               end: Alignment.bottomLeft,
-              colors: [Color(0xffddd6f3), Color(0xfffaaca8).withOpacity(0.4), Color(0xfff3e7e9),]
+              colors: [const Color(0xffddd6f3), const Color(0xfffaaca8).withOpacity(0.4), const Color(0xfff3e7e9),]
           )
       ),
       child: SafeArea(

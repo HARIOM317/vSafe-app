@@ -18,7 +18,7 @@ class _IntroPage1State extends State<IntroPage1> with SingleTickerProviderStateM
   void initState() {
     super.initState();
 
-    _animationController = AnimationController(vsync: this, duration: Duration(seconds: 7), lowerBound: 0.5);
+    _animationController = AnimationController(vsync: this, duration: const Duration(seconds: 7), lowerBound: 0.5);
 
     _animationController.addListener(() {
       setState(() {
@@ -32,7 +32,7 @@ class _IntroPage1State extends State<IntroPage1> with SingleTickerProviderStateM
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topRight,
           end: Alignment.bottomLeft,
@@ -99,7 +99,7 @@ class _IntroPage1State extends State<IntroPage1> with SingleTickerProviderStateM
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         // <<<  With _animationController >>>
-        color: Color(0xfff6d0ef).withOpacity(1.0 - _animationController.value),
+        color: const Color(0xfff6d0ef).withOpacity(1.0 - _animationController.value),
       ),
     );
   }

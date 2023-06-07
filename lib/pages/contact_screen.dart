@@ -1,5 +1,4 @@
 import 'package:contacts_service/contacts_service.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -8,6 +7,8 @@ import 'package:v_safe/model/contact_model.dart';
 import 'package:v_safe/utils/constants.dart';
 
 class ContactScreen extends StatefulWidget {
+  const ContactScreen({super.key});
+
   @override
   State<ContactScreen> createState() => _ContactScreenState();
 }
@@ -15,7 +16,7 @@ class ContactScreen extends StatefulWidget {
 class _ContactScreenState extends State<ContactScreen> {
   List<Contact> contacts = [];
   List<Contact> contactsFilter = [];
-  DataBaseHelper _dataBaseHelper = DataBaseHelper();
+  final DataBaseHelper _dataBaseHelper = DataBaseHelper();
 
   TextEditingController searchController = TextEditingController();
 
@@ -32,11 +33,11 @@ class _ContactScreenState extends State<ContactScreen> {
   }
 
   filterContacts() {
-    List<Contact> _contacts = [];
-    _contacts.addAll(contacts);
+    List<Contact> contactsList = [];
+    contactsList.addAll(contacts);
 
     if (searchController.text.isNotEmpty) {
-      _contacts.retainWhere((element) {
+      contactsList.retainWhere((element) {
         String searchTerm = searchController.text.toLowerCase();
         String searchTermFlatten = flattenPhoneNumber(searchTerm);
         String contactName = element.displayName!.toLowerCase();
@@ -56,7 +57,7 @@ class _ContactScreenState extends State<ContactScreen> {
       });
     }
     setState(() {
-      contactsFilter = _contacts;
+      contactsFilter = contactsList;
     });
   }
 
@@ -95,30 +96,30 @@ class _ContactScreenState extends State<ContactScreen> {
   }
 
   getAllContacts() async {
-    List<Contact> _contacts = await ContactsService.getContacts(
+    List<Contact> contactsList = await ContactsService.getContacts(
       withThumbnails: false
     );
     setState(() {
-      contacts = _contacts;
+      contacts = contactsList;
     });
   }
 
   @override
   Widget build(BuildContext context) {
     bool isSearching = searchController.text.isNotEmpty;
-    bool listItemExist = (contactsFilter.length > 0 || contacts.length > 0);
+    bool listItemExist = (contactsFilter.isNotEmpty || contacts.isNotEmpty);
 
     return Scaffold(
-      body: contacts.length == 0
+      body: contacts.isEmpty
           ? Container(
               decoration: BoxDecoration(
-                color: Color(0xfff9d2cf).withOpacity(0.5),
+                color: const Color(0xfff9d2cf).withOpacity(0.5),
               ),
-              child: Center(child: CircularProgressIndicator()))
+              child: const Center(child: CircularProgressIndicator()))
           : SafeArea(
               child: Container(
                   decoration: BoxDecoration(
-                    color: Color(0xfff9d2cf).withOpacity(0.5),
+                    color: const Color(0xfff9d2cf).withOpacity(0.5),
                   ),
                   child: Column(
                     children: [
@@ -127,7 +128,7 @@ class _ContactScreenState extends State<ContactScreen> {
                         child: TextField(
                           autofocus: true,
                           controller: searchController,
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                             labelText: "Search contact",
                             prefixIcon: Icon(Icons.search),
                           ),
@@ -150,18 +151,18 @@ class _ContactScreenState extends State<ContactScreen> {
                                             contact.avatar!.isNotEmpty
                                         ? CircleAvatar(
                                             backgroundColor:
-                                                Color(0xff401793),
+                                                const Color(0xff401793),
                                             backgroundImage:
                                                 MemoryImage(contact.avatar!),
                                           )
                                         : CircleAvatar(
                                             backgroundColor:
-                                                Color(0xff401793),
+                                                const Color(0xff401793),
                                             child: Text(contact.initials()),
                                           ),
 
                                     onTap: (){
-                                      if (contact.phones!.length > 0) {
+                                      if (contact.phones!.isNotEmpty) {
                                         final String phoneNumber = contact.phones!.elementAt(0).value!;
                                         final String name = contact.displayName!;
                                         _addContact(TContactModel(phoneNumber, name));
@@ -173,9 +174,7 @@ class _ContactScreenState extends State<ContactScreen> {
                                 },
                               ),
                             )
-                          : Container(
-                              child: Text("Searching..."),
-                            ),
+                          : const Center(child: Text("Searching...")),
                     ],
                   )),
             ),
@@ -189,6 +188,9 @@ class _ContactScreenState extends State<ContactScreen> {
     } else {
       Fluttertoast.showToast(msg: "Failed to add contact!");
     }
+
+    // ignore: use_build_context_synchronously
+    if (!context.mounted) return;
     Navigator.of(context).pop(true);
   }
 

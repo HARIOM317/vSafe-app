@@ -9,8 +9,8 @@ class IntroPage4 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(50),
-      decoration: BoxDecoration(
+      padding: const EdgeInsets.all(50),
+      decoration: const BoxDecoration(
           gradient: LinearGradient(
               begin: Alignment.topRight,
               end: Alignment.bottomLeft,

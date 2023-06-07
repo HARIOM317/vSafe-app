@@ -1,15 +1,17 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:v_safe/components/custom_textfield.dart';
 import 'package:v_safe/components/primary_button.dart';
 import 'package:v_safe/components/secondary_button.dart';
 import 'package:v_safe/model/user_model.dart';
+import 'package:v_safe/user/authentication/mail_verification_screen.dart';
 import 'package:v_safe/user/login_screen.dart';
 import 'package:v_safe/utils/constants.dart';
 
 class RegisterUser extends StatefulWidget {
+  const RegisterUser({super.key});
+
   @override
   State<RegisterUser> createState() => _RegisterUserState();
 }
@@ -18,25 +20,13 @@ class _RegisterUserState extends State<RegisterUser> {
   bool isPasswordHide = true;
   bool isConfirmPasswordHide = true;
   final _formKey = GlobalKey<FormState>();
-  final _formData = Map<String, Object>();
+  final _formData = <String, Object>{};
   bool isLoading = false;
 
   // function to disable back button
   Future<bool> _onPop() async {
     return false;
   }
-
-  // final _auth = FirebaseAuth.instance;
-  //
-  // Future<void> sendEmailVerification() async{
-  //   try{
-  //     _auth.currentUser!.sendEmailVerification();
-  //   } on FirebaseAuthException catch(e){
-  //     showAlertDialogueBox(context, e.message.toString());
-  //   } catch(e){
-  //     showAlertDialogueBox(context, "Something went wrong!");
-  //   }
-  // }
 
   // on submit function
   _onSubmit() async {
@@ -77,7 +67,7 @@ class _RegisterUserState extends State<RegisterUser> {
           final jsonData = user.toJson();
 
           await db.set(jsonData).whenComplete(() {
-            goTo(context, LoginScreen());
+            goTo(context, const SendOTP());
             setState(() {
               isLoading = false;
             });
@@ -113,9 +103,9 @@ class _RegisterUserState extends State<RegisterUser> {
           height: double.infinity,
           decoration: BoxDecoration(
               gradient: LinearGradient(colors: [
-            Color(0xffdad4ec).withOpacity(0.75),
-            Color(0xffdad4ec).withOpacity(0.5),
-            Color(0xfff3e7e9).withOpacity(0.75)
+            const Color(0xffdad4ec).withOpacity(0.75),
+            const Color(0xffdad4ec).withOpacity(0.5),
+            const Color(0xfff3e7e9).withOpacity(0.75)
           ])),
           child: Center(
             child: SafeArea(
@@ -140,8 +130,8 @@ class _RegisterUserState extends State<RegisterUser> {
                                 ),
 
                                 // login text
-                                Padding(
-                                  padding: const EdgeInsets.all(10.0),
+                                const Padding(
+                                  padding: EdgeInsets.all(10.0),
                                   child: Text(
                                     "User Registration",
                                     style: TextStyle(
@@ -165,7 +155,7 @@ class _RegisterUserState extends State<RegisterUser> {
                                           hintText: "Name",
                                           textInputAction: TextInputAction.next,
                                           keyboardType: TextInputType.name,
-                                          prefix: Icon(Icons.person),
+                                          prefix: const Icon(Icons.person),
                                           onSave: (name) {
                                             _formData['name'] = name ?? "";
                                           },
@@ -187,7 +177,7 @@ class _RegisterUserState extends State<RegisterUser> {
                                           hintText: "Phone",
                                           textInputAction: TextInputAction.next,
                                           keyboardType: TextInputType.phone,
-                                          prefix: Icon(Icons.phone),
+                                          prefix: const Icon(Icons.phone),
                                           onSave: (phone) {
                                             _formData['phone'] = phone ?? "";
                                           },
@@ -210,7 +200,7 @@ class _RegisterUserState extends State<RegisterUser> {
                                           textInputAction: TextInputAction.next,
                                           keyboardType:
                                               TextInputType.emailAddress,
-                                          prefix: Icon(Icons.email),
+                                          prefix: const Icon(Icons.email),
                                           onSave: (email) {
                                             _formData['email'] = email ?? "";
                                           },
@@ -235,7 +225,7 @@ class _RegisterUserState extends State<RegisterUser> {
                                           textInputAction: TextInputAction.next,
                                           keyboardType:
                                               TextInputType.visiblePassword,
-                                          prefix: Icon(Icons.lock_rounded),
+                                          prefix: const Icon(Icons.lock_rounded),
                                           onSave: (password) {
                                             _formData['password'] =
                                                 password ?? "";
@@ -257,8 +247,8 @@ class _RegisterUserState extends State<RegisterUser> {
                                               });
                                             },
                                             icon: isPasswordHide
-                                                ? Icon(Icons.visibility_off)
-                                                : Icon(Icons.visibility),
+                                                ? const Icon(Icons.visibility_off)
+                                                : const Icon(Icons.visibility),
                                           ),
                                         ),
                                       ),
@@ -270,15 +260,15 @@ class _RegisterUserState extends State<RegisterUser> {
                                           hintText: "Confirm Password",
                                           keyboardType:
                                               TextInputType.visiblePassword,
-                                          prefix: Icon(Icons.lock_rounded),
+                                          prefix: const Icon(Icons.lock_rounded),
                                           onSave: (password) {
                                             _formData['confirm_password'] =
                                                 password ?? "";
                                           },
-                                          validate: (Confirm_password) {
-                                            if (Confirm_password!.isEmpty ||
-                                                Confirm_password.length < 8 ||
-                                                Confirm_password.contains(" ")) {
+                                          validate: (confirmPassword) {
+                                            if (confirmPassword!.isEmpty ||
+                                                confirmPassword.length < 8 ||
+                                                confirmPassword.contains(" ")) {
                                               return "Password length should be more than 8 characters";
                                             } else {
                                               return null;
@@ -293,8 +283,8 @@ class _RegisterUserState extends State<RegisterUser> {
                                               });
                                             },
                                             icon: isConfirmPasswordHide
-                                                ? Icon(Icons.visibility_off)
-                                                : Icon(Icons.visibility),
+                                                ? const Icon(Icons.visibility_off)
+                                                : const Icon(Icons.visibility),
                                           ),
                                         ),
                                       ),
@@ -331,7 +321,7 @@ class _RegisterUserState extends State<RegisterUser> {
                                       SecondaryButton(
                                           title: "Sign in",
                                           onPressed: () {
-                                            goTo(context, LoginScreen());
+                                            goTo(context, const LoginScreen());
                                           }),
                                     ],
                                   ),

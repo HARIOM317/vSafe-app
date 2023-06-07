@@ -1,6 +1,4 @@
-import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:background_sms/background_sms.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -11,6 +9,8 @@ import 'package:v_safe/db/db_services.dart';
 import 'package:v_safe/model/contact_model.dart';
 
 class Situation extends StatefulWidget {
+  const Situation({super.key});
+
   @override
   State<Situation> createState() => _SituationState();
 }
@@ -21,32 +21,45 @@ class _SituationState extends State<Situation> {
   double shadowRadius = 30;
   Color shadowColor = Colors.white.withOpacity(0.5);
   Color buttonBG = Colors.white.withOpacity(0.5);
-  Color iconColor = Color(0xffcc1840);
-  Color textColor = Color(0xffcc1840);
+  Color iconColor = const Color(0xffcc1840);
+  Color textColor = const Color(0xffcc1840);
 
   Position? _currentPosition;
   String? _currentAddress;
   LocationPermission? locationPermission;
 
+  String lat = "";
+  String long = "";
+
   _getPermission() async => await [Permission.sms].request();
   _isPermissionGranted() async => await Permission.sms.status.isGranted;
   _sendSMS(String phoneNumber, String message, {int? simSlot}) async {
-    await BackgroundSms.sendMessage(phoneNumber: phoneNumber, message: message, simSlot: simSlot);
+    await BackgroundSms.sendMessage(
+        phoneNumber: phoneNumber, message: message, simSlot: simSlot);
   }
 
-  _getCurrentLocation() async{
+  _getLatLong() async {
+    Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
+
+    long = position.longitude.toString();
+    lat = position.latitude.toString();
+  }
+
+  _getCurrentLocation() async {
     locationPermission = await Geolocator.checkPermission();
-    if(locationPermission == LocationPermission.denied){
+
+    if (locationPermission == LocationPermission.denied) {
       locationPermission = await Geolocator.requestPermission();
       Fluttertoast.showToast(msg: "Location permission denied!");
-      if(locationPermission == LocationPermission.deniedForever){
+      if (locationPermission == LocationPermission.deniedForever) {
         Fluttertoast.showToast(msg: "Location permission permanently denied!");
       }
     }
     Geolocator.getCurrentPosition(
-      desiredAccuracy: LocationAccuracy.best,
-      forceAndroidLocationManager: true
-    ).then((Position position) {
+            desiredAccuracy: LocationAccuracy.high,
+            forceAndroidLocationManager: true)
+        .then((Position position) {
       setState(() {
         _currentPosition = position;
         _getAddressFromLatLong();
@@ -56,15 +69,17 @@ class _SituationState extends State<Situation> {
     });
   }
 
-  _getAddressFromLatLong() async{
-    try{
-      List<Placemark> placeMarks = await placemarkFromCoordinates(_currentPosition!.latitude, _currentPosition!.longitude);
+  _getAddressFromLatLong() async {
+    try {
+      List<Placemark> placeMarks = await placemarkFromCoordinates(
+          _currentPosition!.latitude, _currentPosition!.longitude);
 
       Placemark place = placeMarks[0];
       setState(() {
-        _currentAddress = "${place.locality.toString()}, ${place.subLocality.toString()}, ${place.street.toString()}, ${place.postalCode.toString()}";
+        _currentAddress =
+            "${place.locality.toString()}, ${place.subLocality.toString()}, ${place.street.toString()}, ${place.postalCode.toString()}";
       });
-    } catch(e){
+    } catch (e) {
       Fluttertoast.showToast(msg: e.toString());
     }
   }
@@ -72,6 +87,7 @@ class _SituationState extends State<Situation> {
   @override
   void initState() {
     super.initState();
+    _getLatLong();
     _getPermission();
     _getCurrentLocation();
   }
@@ -87,7 +103,8 @@ class _SituationState extends State<Situation> {
             child: Container(
               height: 120,
               width: double.infinity,
-              margin: const EdgeInsets.only(left: 5, right: 5, top: 2.5, bottom: 2.5),
+              margin: const EdgeInsets.only(
+                  left: 5, right: 5, top: 2.5, bottom: 2.5),
               decoration: BoxDecoration(
                 borderRadius: const BorderRadius.only(
                     topRight: Radius.circular(15),
@@ -123,103 +140,14 @@ class _SituationState extends State<Situation> {
 
                   // Panic Button
                   GestureDetector(
-                    onTap: (){
-                      setState(() {
-                          buttonRadius = 40;
-                          buttonBG = Color(0xffff5722);
-                          iconColor = Colors.white;
-                          textColor = Colors.white;
-                          shadowColor = Colors.deepOrange.withOpacity(0.5);
-                          shadowRadius = 50;
-                      });
+                    onTap: () {
+                      _getLatLong();
+                      _getCurrentLocation();
+                      _getAddressFromLatLong();
 
-                      showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return AlertDialog(
-                              elevation: 20,
-                              shadowColor: Colors.deepPurple.withOpacity(0.5),
-                              backgroundColor: Colors.deepPurple[100],
-                              shape: const RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.all(Radius.circular(32.0))
-                              ),
-                              title: Row(
-                                children: const [
-                                  Padding(
-                                    padding: EdgeInsets.all(8.0),
-                                    child: Icon(Icons.emergency_share, color: Color(0xff6a1010), size: 30,),
-                                  ),
-
-                                  Padding(
-                                    padding: EdgeInsets.all(8.0),
-                                    child: Text("Are you in Danger?", style: TextStyle(color: Color(0xff6a1010)),),
-                                  )
-                                ],
-                              ),
-
-                              content: const Text("Do you really want to send an alert SOS message to all trusted contacts?"),
-
-                              actions: [
-                                TextButton(
-                                    onPressed: () {
-                                      Navigator.pop(context);
-                                      setState(() {
-                                        buttonRadius = 35;
-                                        shadowRadius = 30;
-                                        shadowColor = Colors.white.withOpacity(0.5);
-                                        buttonBG = Colors.white.withOpacity(0.5);
-                                        iconColor = Color(0xffcc1840);
-                                        textColor = Color(0xffcc1840);
-                                      });
-                                    },
-                                    child: Text("Cancel", style: TextStyle(color: Colors.green[900]),)
-                                ),
-
-                                TextButton(
-                                    onPressed: () async {
-                                      Navigator.of(context).pop(true);
-
-                                      List<TContactModel> contactList = await DataBaseHelper().getContactList();
-                                      String recipients = "";
-                                      int i = 1;
-                                      for(TContactModel contact in contactList){
-                                        recipients += contact.number;
-                                        if(i != contactList.length){
-                                          recipients += ";";
-                                          i++;
-                                        }
-                                      }
-
-                                      String messageBody = "https://www.google.com/maps/search/?api=1&query=$_currentAddress";
-                                      if(await _isPermissionGranted()) {
-                                        for (var element in contactList) {
-                                          _sendSMS(element.number, "I am in trouble! Please try to reach me as soon as possible.\nMy current location is $messageBody", simSlot: 1);
-                                        }
-                                        Fluttertoast.showToast(msg: "SOS alert sent successfully!");
-                                      }
-                                      else{
-                                        Fluttertoast.showToast(msg: "Something went wrong!");
-                                      }
-                                      setState(() {
-                                        buttonRadius = 35;
-                                        shadowRadius = 30;
-                                        shadowColor = Colors.white.withOpacity(0.5);
-                                        buttonBG = Colors.white.withOpacity(0.5);
-                                        iconColor = Color(0xffcc1840);
-                                        textColor = Color(0xffcc1840);
-                                      });
-                                    },
-                                    child: const Text("Send", style: TextStyle(color: Color(0xff6a1010)),))
-                              ],
-                            );
-                          }
-                      );
-                    },
-
-                    onLongPress: () {
                       setState(() {
                         buttonRadius = 40;
-                        buttonBG = Color(0xffff5722);
+                        buttonBG = const Color(0xffff5722);
                         iconColor = Colors.white;
                         textColor = Colors.white;
                         shadowColor = Colors.deepOrange.withOpacity(0.5);
@@ -234,24 +162,30 @@ class _SituationState extends State<Situation> {
                               shadowColor: Colors.deepPurple.withOpacity(0.5),
                               backgroundColor: Colors.deepPurple[100],
                               shape: const RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.all(Radius.circular(32.0))
-                              ),
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(32.0))),
                               title: Row(
                                 children: const [
                                   Padding(
                                     padding: EdgeInsets.all(8.0),
-                                    child: Icon(Icons.emergency_share, color: Color(0xff6a1010), size: 30,),
+                                    child: Icon(
+                                      Icons.emergency_share,
+                                      color: Color(0xff6a1010),
+                                      size: 30,
+                                    ),
                                   ),
-
                                   Padding(
                                     padding: EdgeInsets.all(8.0),
-                                    child: Text("Are you in Danger?", style: TextStyle(color: Color(0xff6a1010)),),
+                                    child: Text(
+                                      "Are you in Danger?",
+                                      style:
+                                          TextStyle(color: Color(0xff6a1010)),
+                                    ),
                                   )
                                 ],
                               ),
-
-                              content: const Text("Do you really want to send an alert SOS message to all trusted contacts?"),
-
+                              content: const Text(
+                                  "Do you really want to send an alert SOS message to all trusted contacts?"),
                               actions: [
                                 TextButton(
                                     onPressed: () {
@@ -259,56 +193,171 @@ class _SituationState extends State<Situation> {
                                       setState(() {
                                         buttonRadius = 35;
                                         shadowRadius = 30;
-                                        shadowColor = Colors.white.withOpacity(0.5);
-                                        buttonBG = Colors.white.withOpacity(0.5);
-                                        iconColor = Color(0xffcc1840);
-                                        textColor = Color(0xffcc1840);
+                                        shadowColor =
+                                            Colors.white.withOpacity(0.5);
+                                        buttonBG =
+                                            Colors.white.withOpacity(0.5);
+                                        iconColor = const Color(0xffcc1840);
+                                        textColor = const Color(0xffcc1840);
                                       });
                                     },
-                                    child: Text("Cancel", style: TextStyle(color: Colors.green[900]),)
-                                ),
-
+                                    child: Text(
+                                      "Cancel",
+                                      style:
+                                          TextStyle(color: Colors.green[900]),
+                                    )),
                                 TextButton(
                                     onPressed: () async {
                                       Navigator.of(context).pop(true);
 
-                                      List<TContactModel> contactList = await DataBaseHelper().getContactList();
-                                      String recipients = "";
-                                      int i = 1;
-                                      for(TContactModel contact in contactList){
-                                        recipients += contact.number;
-                                        if(i != contactList.length){
-                                          recipients += ";";
-                                          i++;
-                                        }
-                                      }
+                                      List<TContactModel> contactList =
+                                          await DataBaseHelper()
+                                              .getContactList();
+                                      String messageBody =
+                                          "https://www.google.com/maps/search/?api=1&query=$lat%2C$long $_currentAddress";
 
-                                      String messageBody = "https://www.google.com/maps/search/?api=1&query=$_currentAddress";
-                                      if(await _isPermissionGranted()) {
+                                      if (await _isPermissionGranted()) {
                                         for (var element in contactList) {
-                                          _sendSMS(element.number, "I am in trouble! Please try to reach me as soon as possible.\nMy current location is $messageBody", simSlot: 1);
+                                          _sendSMS(element.number,
+                                              "I am in trouble! Please try to reach me as soon as possible.\nMy current location is $messageBody",
+                                              simSlot: 1);
                                         }
-                                        Fluttertoast.showToast(msg: "SOS alert sent successfully!");
-                                      }
-                                      else{
-                                        Fluttertoast.showToast(msg: "Something went wrong!");
+                                        Fluttertoast.showToast(
+                                            msg:
+                                                "SOS alert sent successfully!");
+                                      } else {
+                                        Fluttertoast.showToast(
+                                            msg: "Something went wrong!");
                                       }
                                       setState(() {
                                         buttonRadius = 35;
                                         shadowRadius = 30;
-                                        shadowColor = Colors.white.withOpacity(0.5);
-                                        buttonBG = Colors.white.withOpacity(0.5);
-                                        iconColor = Color(0xffcc1840);
-                                        textColor = Color(0xffcc1840);
+                                        shadowColor =
+                                            Colors.white.withOpacity(0.5);
+                                        buttonBG =
+                                            Colors.white.withOpacity(0.5);
+                                        iconColor = const Color(0xffcc1840);
+                                        textColor = const Color(0xffcc1840);
                                       });
                                     },
-                                    child: const Text("Send", style: TextStyle(color: Color(0xff6a1010)),))
+                                    child: const Text(
+                                      "Send",
+                                      style:
+                                          TextStyle(color: Color(0xff6a1010)),
+                                    ))
                               ],
                             );
-                          }
-                      );
+                          });
                     },
+                    onLongPress: () {
+                      _getLatLong();
+                      _getCurrentLocation();
+                      _getAddressFromLatLong();
 
+                      setState(() {
+                        buttonRadius = 40;
+                        buttonBG = const Color(0xffff5722);
+                        iconColor = Colors.white;
+                        textColor = Colors.white;
+                        shadowColor = Colors.deepOrange.withOpacity(0.5);
+                        shadowRadius = 50;
+                      });
+
+                      showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              elevation: 20,
+                              shadowColor: Colors.deepPurple.withOpacity(0.5),
+                              backgroundColor: Colors.deepPurple[100],
+                              shape: const RoundedRectangleBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(32.0))),
+                              title: Row(
+                                children: const [
+                                  Padding(
+                                    padding: EdgeInsets.all(8.0),
+                                    child: Icon(
+                                      Icons.emergency_share,
+                                      color: Color(0xff6a1010),
+                                      size: 30,
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.all(8.0),
+                                    child: Text(
+                                      "Are you in Danger?",
+                                      style:
+                                          TextStyle(color: Color(0xff6a1010)),
+                                    ),
+                                  )
+                                ],
+                              ),
+                              content: const Text(
+                                  "Do you really want to send an alert SOS message to all trusted contacts?"),
+                              actions: [
+                                TextButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                      setState(() {
+                                        buttonRadius = 35;
+                                        shadowRadius = 30;
+                                        shadowColor =
+                                            Colors.white.withOpacity(0.5);
+                                        buttonBG =
+                                            Colors.white.withOpacity(0.5);
+                                        iconColor = const Color(0xffcc1840);
+                                        textColor = const Color(0xffcc1840);
+                                      });
+                                    },
+                                    child: Text(
+                                      "Cancel",
+                                      style:
+                                          TextStyle(color: Colors.green[900]),
+                                    )),
+                                TextButton(
+                                    onPressed: () async {
+                                      Navigator.of(context).pop(true);
+
+                                      List<TContactModel> contactList =
+                                          await DataBaseHelper()
+                                              .getContactList();
+                                      String messageBody =
+                                          "https://www.google.com/maps/search/?api=1&query=$lat%2C$long $_currentAddress";
+
+                                      if (await _isPermissionGranted()) {
+                                        for (var element in contactList) {
+                                          _sendSMS(element.number,
+                                              "I am in trouble! Please try to reach me as soon as possible.\nMy current location is $messageBody",
+                                              simSlot: 1);
+                                        }
+                                        Fluttertoast.showToast(
+                                            msg:
+                                                "SOS alert sent successfully!");
+                                      } else {
+                                        Fluttertoast.showToast(
+                                            msg: "Something went wrong!");
+                                      }
+                                      setState(() {
+                                        buttonRadius = 35;
+                                        shadowRadius = 30;
+                                        shadowColor =
+                                            Colors.white.withOpacity(0.5);
+                                        buttonBG =
+                                            Colors.white.withOpacity(0.5);
+                                        iconColor = const Color(0xffcc1840);
+                                        textColor = const Color(0xffcc1840);
+                                      });
+                                    },
+                                    child: const Text(
+                                      "Send",
+                                      style:
+                                          TextStyle(color: Color(0xff6a1010)),
+                                    ))
+                              ],
+                            );
+                          });
+                    },
                     child: Container(
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(100),
@@ -319,7 +368,7 @@ class _SituationState extends State<Situation> {
                                 offset: const Offset(0, 2),
                                 color: shadowColor
                                 // color: Colors.deepOrange.withOpacity(0.5)
-                            )
+                                )
                           ]),
                       child: CircleAvatar(
                         radius: buttonRadius,
@@ -357,11 +406,12 @@ class _SituationState extends State<Situation> {
           // Todo: Feel Unsafe situation
           Center(
             child: Container(
-              margin: EdgeInsets.only(left: 5, right: 5, top: 2.5, bottom: 2.5),
+              margin: const EdgeInsets.only(
+                  left: 5, right: 5, top: 2.5, bottom: 2.5),
               width: double.infinity,
               height: 120,
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.only(
+                borderRadius: const BorderRadius.only(
                     topRight: Radius.circular(15),
                     bottomLeft: Radius.circular(15),
                     topLeft: Radius.circular(5),
@@ -385,8 +435,8 @@ class _SituationState extends State<Situation> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.only(top: 8.0),
+                  const Padding(
+                    padding: EdgeInsets.only(top: 8.0),
                     child: Text(
                       'Feel Unsafe',
                       style: TextStyle(
@@ -424,7 +474,7 @@ class _SituationState extends State<Situation> {
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
+                                  children: const [
                                     FaIcon(
                                       FontAwesomeIcons.video,
                                       color: Color(0xff003c6b),
@@ -472,7 +522,7 @@ class _SituationState extends State<Situation> {
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
+                                  children: const [
                                     FaIcon(
                                       FontAwesomeIcons.image,
                                       color: Color(0xff003c6b),

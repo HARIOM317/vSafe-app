@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:video_player/video_player.dart';
@@ -9,7 +8,7 @@ import 'package:drop_shadow/drop_shadow.dart';
 AppBar pageHeading(String title){
   return AppBar(
     centerTitle: true,
-    title: Text(title, style: TextStyle(
+    title: Text(title, style: const TextStyle(
       fontFamily: 'NovaSlim-Regular',
       fontWeight: FontWeight.bold,
       fontSize: 18,
@@ -30,10 +29,10 @@ AppBar pageHeading(String title){
 // function to tell about tip
 Widget aboutTip(String text){
   return Container(
-    margin: EdgeInsets.only(left: 20, right: 20, top: 5, bottom: 5),
-    padding: EdgeInsets.all(10),
+    margin: const EdgeInsets.only(left: 20, right: 20, top: 5, bottom: 5),
+    padding: const EdgeInsets.all(10),
     child: Center(
-        child: Text(text, style: TextStyle(
+        child: Text(text, style: const TextStyle(
           fontFamily: 'EBGaramond-Regular',
           fontSize: 16,
           fontStyle: FontStyle.italic,
@@ -51,7 +50,7 @@ Center createTitle(String title) {
   return Center(
       child: Text(
         title,
-        style: TextStyle(
+        style: const TextStyle(
           fontSize: 18,
           fontWeight: FontWeight.bold,
           fontFamily: 'Courgette-Regular',
@@ -63,11 +62,11 @@ Center createTitle(String title) {
 // function to create tip description
 Widget createTextDescription(String text) {
   return Container(
-    margin: EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 10),
-    padding: EdgeInsets.only(left: 15, right: 15),
+    margin: const EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 10),
+    padding: const EdgeInsets.only(left: 15, right: 15),
     child: Center(
       child: Text(text,
-        style: TextStyle(
+        style: const TextStyle(
         fontFamily: 'PTSans-Regular',
         fontSize: 18,
         fontWeight: FontWeight.w500,
@@ -82,12 +81,12 @@ Widget createTextDescription(String text) {
 // function to create some remember things
 Widget createTextRemember(String text) {
   return Container(
-    margin: EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 10),
-    padding: EdgeInsets.only(left: 15, right: 15),
+    margin: const EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 10),
+    padding: const EdgeInsets.only(left: 15, right: 15),
     child: Center(
       child: Text(
         text,
-        style: TextStyle(
+        style: const TextStyle(
           fontFamily: 'Dosis-Regular',
           fontSize: 18,
           fontWeight: FontWeight.bold,
@@ -104,7 +103,7 @@ Widget footer(){
   return Container(
     width: double.infinity,
     height: 50,
-    decoration: BoxDecoration(
+    decoration: const BoxDecoration(
       gradient: LinearGradient(colors: [Color(0xff6416ff), Color(0xff5623a3)])
     ),
 
@@ -114,7 +113,7 @@ Widget footer(){
 
         },
         child: RichText(
-          text: TextSpan(
+          text: const TextSpan(
               style: TextStyle(
                 color: Colors.black,
               ),
@@ -167,9 +166,10 @@ Center putImage(String path) {
 class VideoPlayerWidget extends StatefulWidget {
   final String videoPath;
 
-  VideoPlayerWidget({required this.videoPath});
+  const VideoPlayerWidget({super.key, required this.videoPath});
 
   @override
+  // ignore: library_private_types_in_public_api
   _VideoPlayerWidgetState createState() => _VideoPlayerWidgetState();
 }
 // class to play a video
@@ -203,11 +203,11 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
       offset: const Offset(0, 5),
       child: AnimatedOpacity(
         opacity: myOpacity,
-        duration: Duration(seconds: 3),
+        duration: const Duration(seconds: 3),
         curve: Curves.easeOutQuart,
 
         child: AnimatedContainer(
-          duration: Duration(milliseconds: 500),
+          duration: const Duration(milliseconds: 500),
           curve: Curves.easeInOutQuint,
           margin: EdgeInsets.all(marginValue),
 
@@ -230,7 +230,7 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
                         child: VideoPlayer(_controller),
                       );
                     } else {
-                      return Center(child: CircularProgressIndicator());
+                      return const Center(child: CircularProgressIndicator());
                     }
                   },
                 ),
@@ -260,7 +260,7 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
                       },
 
                       child: Container(
-                        padding: EdgeInsets.all(10),
+                        padding: const EdgeInsets.all(10),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(100),
                           gradient: buttonGradient,
@@ -280,16 +280,17 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
   }
 }
 
-
 // Todo - class to create awareness tips page
 class AwarenessTips extends StatelessWidget {
+  const AwarenessTips({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: pageHeading("Be Aware of Your Surroundings"),
 
       body: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           gradient: RadialGradient(colors: [Color(0xff93a5cf), Color(0xffe4efe9)],
               radius: 1.0,
           ),
@@ -361,13 +362,15 @@ class AwarenessTips extends StatelessWidget {
 
 // Todo - class to create Maintaining Emergency Contacts Tips page
 class MaintainEmergencyContactsTips extends StatelessWidget {
+  const MaintainEmergencyContactsTips({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: pageHeading("Phone and Emergency Contacts"),
 
       body: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           gradient:
               RadialGradient(colors: [Color(0xff93a5cf), Color(0xffe4efe9)], radius: 1.0),
         ),
@@ -438,13 +441,15 @@ class MaintainEmergencyContactsTips extends StatelessWidget {
 
 // Todo - Class to create self defence tips page
 class LearnSelfDefenceTips extends StatelessWidget {
+  const LearnSelfDefenceTips({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: pageHeading("Learn Self Defence"),
 
       body: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           gradient:
           RadialGradient(colors: [Color(0xff93a5cf), Color(0xffe4efe9)], radius: 1.0),
         ),
@@ -455,42 +460,42 @@ class LearnSelfDefenceTips extends StatelessWidget {
               children: [
                 aboutTip("Self-defense techniques can empower women and help them feel more confident in protecting themselves. Here are some effective self-defense techniques that women can consider learning:"),
 
-                VideoPlayerWidget(videoPath: 'assets/videos/safety_videos/hammer_strike.mp4'),
+                const VideoPlayerWidget(videoPath: 'assets/videos/safety_videos/hammer_strike.mp4'),
                 createTitle("Hammer strike"),
                 createTextDescription("A hammer strike is a self-defense technique that involves using the base of your hand, similar to swinging a hammer, to deliver a powerful strike to an attacker. It is a close-range strike that aims to incapacitate the assailant and create an opportunity for escape."),
                 createTextRemember("Remember, proper execution of the hammer strike requires practice and training. Seek guidance from a qualified self-defense instructor to learn the technique correctly and ensure you are using it safely and effectively."),
 
-                VideoPlayerWidget(videoPath: 'assets/videos/safety_videos/groin_kick.mp4'),
+                const VideoPlayerWidget(videoPath: 'assets/videos/safety_videos/groin_kick.mp4'),
                 createTitle("Groin kick"),
                 createTextDescription("The groin kick is a self-defense technique that targets the groin area of an attacker. It is an effective technique, particularly for women, as it can quickly incapacitate the assailant and create an opportunity to escape."),
                 createTextRemember("Remember, the groin kick is a powerful self-defense technique, but it should be used as a last resort when you believe your personal safety is at risk. It is important to practice this technique under the guidance of a qualified self-defense instructor to ensure proper form, accuracy, and effectiveness. Additionally, always prioritize your safety and well-being, and seek assistance from authorities or professionals if needed."),
 
-                VideoPlayerWidget(videoPath: 'assets/videos/safety_videos/heel_palm_strike.mp4'),
+                const VideoPlayerWidget(videoPath: 'assets/videos/safety_videos/heel_palm_strike.mp4'),
                 createTitle("Heel palm strike"),
                 createTextDescription("The heel palm strike is a self-defense technique that involves using the heel of your palm to strike an attacker. It is a simple yet effective technique for women's self-defense."),
                 createTextRemember("Remember to always prioritize your safety and well-being. Practice the heel palm strike technique under the guidance of a qualified self-defense instructor to ensure proper technique, accuracy, and effectiveness. Additionally, self-defense is not just about physical techniques but also includes situational awareness, assertiveness, and knowing when to seek help."),
 
-                VideoPlayerWidget(videoPath: 'assets/videos/safety_videos/elbow_strike.mp4'),
+                const VideoPlayerWidget(videoPath: 'assets/videos/safety_videos/elbow_strike.mp4'),
                 createTitle("Elbow strike"),
                 createTextDescription("The elbow strike is a powerful self-defense technique that utilizes the elbow as a striking tool. It is an effective technique for women's self-defense as it allows for close-quarters combat and can cause significant damage to an attacker."),
                 createTextRemember("It's important to note that learning self-defense techniques, including the elbow strike, is best done under the guidance of a qualified self-defense instructor. They can provide proper instruction, demonstrate the technique, and offer personalized feedback to ensure you are performing it effectively and safely. Regular practice and training in a controlled environment will help improve your technique and increase your confidence in executing the strike if needed for self-defense."),
 
-                VideoPlayerWidget(videoPath: 'assets/videos/safety_videos/alternative_elbow_strikes.mp4'),
+                const VideoPlayerWidget(videoPath: 'assets/videos/safety_videos/alternative_elbow_strikes.mp4'),
                 createTitle("Alternative elbow strikes"),
                 createTextDescription("In addition to the basic elbow strike, there are alternative elbow strikes that can be effective for women's self-defense. These techniques provide additional options for striking an attacker and increasing your chances of escaping a dangerous situation."),
                 createTextRemember("Remember that proper technique, accuracy, and timing are crucial for effective elbow strikes. Training with a qualified self-defense instructor is highly recommended to learn and practice these techniques safely. Additionally, situational awareness, assertiveness, and knowledge of self-defense principles can greatly enhance your overall personal safety."),
 
-                VideoPlayerWidget(videoPath: 'assets/videos/safety_videos/bear_hug_attack.mp4'),
+                const VideoPlayerWidget(videoPath: 'assets/videos/safety_videos/bear_hug_attack.mp4'),
                 createTitle("bear hug attack"),
                 createTextDescription("A bear hug attack is a situation where an assailant grabs you tightly around your body, usually from the front or behind. It can be a frightening and dangerous scenario, but there are techniques that women can employ for self-defense."),
                 createTextRemember("It's crucial to practice these techniques with a qualified self-defense instructor to ensure proper form, technique, and application. Additionally, developing situational awareness, assertiveness, and knowing when to seek help are valuable skills that contribute to overall personal safety."),
 
-                VideoPlayerWidget(videoPath: 'assets/videos/safety_videos/escape_with_hands_trapped.mp4'),
+                const VideoPlayerWidget(videoPath: 'assets/videos/safety_videos/escape_with_hands_trapped.mp4'),
                 createTitle("Escape with hands trapped "),
                 createTextDescription("When caught in a bear hug with your hands trapped, it can be a challenging situation. However, there are techniques that women can use to escape and protect themselves."),
                 createTextRemember("Remember, the key to successfully escaping a bear hug with hands trapped is to create sudden movements and use your body weight and momentum to your advantage. Regular practice and training with a qualified self-defense instructor are highly recommended to develop the necessary skills and reflexes. Additionally, developing situational awareness, assertiveness, and knowing when to seek help are important aspects of personal safety."),
 
-                VideoPlayerWidget(videoPath: 'assets/videos/safety_videos/escape_from_a_side_headlock.mp4'),
+                const VideoPlayerWidget(videoPath: 'assets/videos/safety_videos/escape_from_a_side_headlock.mp4'),
                 createTitle("Escape from a side headlock"),
                 createTextDescription("Escaping from a side headlock is a crucial skill for women's self-defense."),
                 createTextRemember("It is important to practice this technique with a qualified self-defense instructor to ensure proper form, timing, and effectiveness."),
@@ -509,13 +514,15 @@ class LearnSelfDefenceTips extends StatelessWidget {
 
 // Todo - class to create Avoid Alcohol Consumption tips page
 class AlcoholConsumptionTips extends StatelessWidget {
+  const AlcoholConsumptionTips({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: pageHeading("Avoid Alcohol Consumption"),
 
       body: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           gradient: RadialGradient(colors: [Color(0xff93a5cf), Color(0xffe4efe9)],
             radius: 1.0,
           ),
@@ -561,13 +568,15 @@ class AlcoholConsumptionTips extends StatelessWidget {
 
 // Todo - class to create Safety Apps and Tools tips page
 class SafetyAppsAndToolsTips extends StatelessWidget {
+  const SafetyAppsAndToolsTips({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: pageHeading("Utilize Safety Apps and Tools"),
 
       body: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           gradient: RadialGradient(colors: [Color(0xff93a5cf), Color(0xffe4efe9)],
             radius: 1.0,
           ),
@@ -625,13 +634,15 @@ class SafetyAppsAndToolsTips extends StatelessWidget {
 
 // Todo - class to create Trustworthy Transportation tips page
 class TrustworthyTransportationTips extends StatelessWidget {
+  const TrustworthyTransportationTips({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: pageHeading("Trustworthy Transportation"),
 
       body: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           gradient: RadialGradient(colors: [Color(0xff93a5cf), Color(0xffe4efe9)],
             radius: 1.0,
           ),
@@ -675,13 +686,15 @@ class TrustworthyTransportationTips extends StatelessWidget {
 
 // Todo - class to create personal safety device tips page
 class PersonalSafetyDeviceTips extends StatelessWidget {
+  const PersonalSafetyDeviceTips({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: pageHeading("Carry a Personal Safety Device"),
 
       body: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           gradient: RadialGradient(colors: [Color(0xff93a5cf), Color(0xffe4efe9)],
             radius: 1.5,
           ),
@@ -728,13 +741,15 @@ class PersonalSafetyDeviceTips extends StatelessWidget {
 
 // Todo - class to create stay informed tips page
 class StayInformedTips extends StatelessWidget {
+  const StayInformedTips({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: pageHeading("Stay Informed"),
 
       body: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           gradient: RadialGradient(colors: [Color(0xff93a5cf), Color(0xffe4efe9)],
             radius: 1.0,
           ),
@@ -786,13 +801,15 @@ class StayInformedTips extends StatelessWidget {
 
 // Todo - class to create stay informed tips page
 class TrustYourIntuitionTips extends StatelessWidget {
+  const TrustYourIntuitionTips({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: pageHeading("Trust Your Intuition"),
 
       body: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           gradient: RadialGradient(colors: [Color(0xff93a5cf), Color(0xffe4efe9)],
             radius: 1.0,
           ),
@@ -848,13 +865,15 @@ class TrustYourIntuitionTips extends StatelessWidget {
 
 // Todo - class to create community engagement tips page
 class CommunityEngagementTips extends StatelessWidget {
+  const CommunityEngagementTips({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: pageHeading("Community Engagement"),
 
       body: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           gradient: RadialGradient(colors: [Color(0xff93a5cf), Color(0xffe4efe9)],
             radius: 1.0,
           ),
@@ -908,13 +927,15 @@ class CommunityEngagementTips extends StatelessWidget {
 
 // Todo - class to create Push Yourself tips page
 class PushYourselfTips extends StatelessWidget {
+  const PushYourselfTips({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: pageHeading("Push Yourself"),
 
       body: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           gradient: RadialGradient(colors: [Color(0xff93a5cf), Color(0xffe4efe9)],
             radius: 1.0,
           ),
@@ -972,13 +993,15 @@ class PushYourselfTips extends StatelessWidget {
 
 // Todo - class to create do not fear tips page
 class DoNotFearTips extends StatelessWidget {
+  const DoNotFearTips({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: pageHeading("Don't Fear in Panic Situation"),
 
       body: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           gradient: RadialGradient(colors: [Color(0xff93a5cf), Color(0xffe4efe9)],
             radius: 1.0,
           ),
@@ -1026,13 +1049,15 @@ class DoNotFearTips extends StatelessWidget {
 
 // Todo - class to create do not fear tips page
 class SolidarityTips extends StatelessWidget {
+  const SolidarityTips({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: pageHeading("Solidarity"),
 
       body: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           gradient: RadialGradient(colors: [Color(0xff93a5cf), Color(0xffe4efe9)],
             radius: 1.0,
           ),
@@ -1088,13 +1113,15 @@ class SolidarityTips extends StatelessWidget {
 
 // Todo - class to create Courage tips page
 class CourageTips extends StatelessWidget {
+  const CourageTips({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: pageHeading("Courage"),
 
       body: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           gradient: RadialGradient(colors: [Color(0xff93a5cf), Color(0xffe4efe9)],
             radius: 1.0,
           ),
@@ -1152,13 +1179,15 @@ class CourageTips extends StatelessWidget {
 
 // Todo - class to create Courage tips page
 class PracticeCautionWithStrangersTips extends StatelessWidget {
+  const PracticeCautionWithStrangersTips({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: pageHeading("Practice Caution with Strangers"),
 
       body: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           gradient: RadialGradient(colors: [Color(0xff93a5cf), Color(0xffe4efe9)],
             radius: 1.0,
           ),

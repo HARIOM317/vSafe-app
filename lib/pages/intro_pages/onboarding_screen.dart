@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:v_safe/pages/intro_pages/intro_screen1.dart';
@@ -15,13 +14,15 @@ import 'package:v_safe/user/login_welcome_splash_screen.dart';
 import 'package:v_safe/utils/constants.dart';
 
 class IntroScreen extends StatefulWidget {
+  const IntroScreen({super.key});
+
   @override
   State<IntroScreen> createState() => _IntroScreenState();
 }
 
 class _IntroScreenState extends State<IntroScreen> {
   // controller to keep track of which page we are on
-  PageController _controller = PageController();
+  final PageController _controller = PageController();
 
   // keep track of if we are on the last page or not
   bool onLastPage = false;
@@ -39,7 +40,7 @@ class _IntroScreenState extends State<IntroScreen> {
                 onLastPage = (index == 9);
               });
             },
-            children: [
+            children: const [
               IntroPage1(),
               IntroPage2(),
               IntroPage3(),
@@ -55,7 +56,7 @@ class _IntroScreenState extends State<IntroScreen> {
 
           // dot indicator
           Container(
-              alignment: Alignment(0, 0.9),
+              alignment: const Alignment(0, 0.9),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
@@ -64,7 +65,7 @@ class _IntroScreenState extends State<IntroScreen> {
                       onTap: () {
                         _controller.jumpToPage(10); // indexing start from 0
                       },
-                      child: Text('Skip', style: TextStyle(
+                      child: const Text('Skip', style: TextStyle(
                         color: Colors.blueAccent,
                         fontSize: 18,
                         fontFamily: 'PTSans-Regular',
@@ -79,7 +80,7 @@ class _IntroScreenState extends State<IntroScreen> {
                     axisDirection: Axis.horizontal,
 
                     effect: ExpandingDotsEffect(
-                      activeDotColor: Color(0xff1a237e),
+                      activeDotColor: const Color(0xff1a237e),
                       dotColor: Colors.indigoAccent.withOpacity(0.4),
                       dotHeight: 8,
                       dotWidth: 8
@@ -92,7 +93,7 @@ class _IntroScreenState extends State<IntroScreen> {
                           onTap: () {
                             goTo(context, const LoginWelcomeSplashScreen());
                           },
-                          child: Text("Let's start", style: TextStyle(
+                          child: const Text("Let's start", style: TextStyle(
                               color: Colors.indigo,
                               fontSize: 18,
                               fontFamily: 'PTSans-Regular',
@@ -103,11 +104,11 @@ class _IntroScreenState extends State<IntroScreen> {
                       : GestureDetector(
                           onTap: () {
                             _controller.nextPage(
-                                duration: Duration(milliseconds: 500),
+                                duration: const Duration(milliseconds: 500),
                                 curve: Curves.easeIn
                             );
                           },
-                          child: Text("Next", style: TextStyle(
+                          child: const Text("Next", style: TextStyle(
                               color: Colors.indigoAccent,
                               fontSize: 18,
                               fontFamily: 'PTSans-Regular',

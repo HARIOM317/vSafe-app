@@ -9,8 +9,8 @@ class IntroPage7 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(50),
-      decoration: BoxDecoration(
+      padding: const EdgeInsets.all(50),
+      decoration: const BoxDecoration(
           gradient: LinearGradient(
               begin: Alignment.topRight,
               end: Alignment.bottomLeft,
@@ -31,7 +31,7 @@ class IntroPage7 extends StatelessWidget {
 
               Padding(
                 padding: const EdgeInsets.all(10.0),
-                child: introTextDesign1("Establish your social network on vSafe app which will help to strong your community and helpful in emergency situation", font_size: 20.0),
+                child: introTextDesign1("Establish your social network on vSafe app which will help to strong your community and helpful in emergency situation", fontSize: 20.0),
               ),
 
               Padding(

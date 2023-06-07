@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class SecondaryButton extends StatelessWidget{
@@ -12,14 +11,13 @@ class SecondaryButton extends StatelessWidget{
   Widget build(BuildContext context) {
     return Align(
       alignment: FractionalOffset.bottomRight,
-      child: Container(
+      child: SizedBox(
         height: 50,
-        // width: double.infinity,
         child: TextButton(
           onPressed: () {
             onPressed();
           },
-          child: Text(title, style: TextStyle(
+          child: Text(title, style: const TextStyle(
             color: Colors.indigo,
             fontFamily: 'PTSans-Regular'
           ),

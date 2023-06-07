@@ -9,12 +9,12 @@ class IntroPage6 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(50),
+      padding: const EdgeInsets.all(50),
       decoration: BoxDecoration(
           gradient: LinearGradient(
               begin: Alignment.topRight,
               end: Alignment.bottomLeft,
-              colors: [Color(0xffd5dee7).withOpacity(0.2), Color(0xffffafbd).withOpacity(0.4), Color(0xffc9ffbf).withOpacity(0.6),]
+              colors: [const Color(0xffd5dee7).withOpacity(0.2), const Color(0xffffafbd).withOpacity(0.4), const Color(0xffc9ffbf).withOpacity(0.6),]
       )
       ),
       child: SafeArea(

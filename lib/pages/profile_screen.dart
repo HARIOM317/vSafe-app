@@ -1,9 +1,7 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 import 'package:v_safe/components/primary_button.dart';
 import 'package:v_safe/user/update_user_profile.dart';
@@ -109,13 +107,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return WillPopScope(
       onWillPop: _onPop,
       child: Scaffold(
-        backgroundColor: Color(0xfff9d2cf).withOpacity(0.5),
+        backgroundColor: const Color(0xfff9d2cf).withOpacity(0.5),
         body: isSaving == true
-            ? Center(child: CircularProgressIndicator())
+            ? const Center(child: CircularProgressIndicator())
             : LiquidPullToRefresh(
               onRefresh: _handleRefresh,
               color: Colors.deepPurpleAccent,
-              backgroundColor: Color(0xfff9d2cf).withOpacity(0.7),
+              backgroundColor: const Color(0xfff9d2cf).withOpacity(0.7),
               height: 300,
               animSpeedFactor: 3,
               showChildOpacityTransition: true,
@@ -131,9 +129,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             Container(
-                              padding: EdgeInsets.all(10),
-                              margin: EdgeInsets.all(10),
-                              child: Text(
+                              padding: const EdgeInsets.all(10),
+                              margin: const EdgeInsets.all(10),
+                              child: const Text(
                                 "WELCOME",
                                 style: TextStyle(
                                     fontSize: 25,
@@ -147,19 +145,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 goTo(context, UpdateUserProfile());
                               },
                               child: Container(
-                                margin: EdgeInsets.only(top: 10),
+                                margin: const EdgeInsets.only(top: 10),
                                 decoration: BoxDecoration(
                                     shape: BoxShape.circle,
                                     color: Colors.white,
                                     border: Border.all(
                                         width: 3, color: Colors.white)),
                                 child: profilePic == null
-                                    ? CircleAvatar(
+                                    ? const CircleAvatar(
+                                        radius: 75,
                                         child: Icon(
                                           Icons.person,
                                           size: 100,
                                         ),
-                                        radius: 75,
                                       )
                                     : profilePic!.contains('http')
                                         ? CircleAvatar(
@@ -188,7 +186,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 hintText: nameController.text,
                                 border: InputBorder.none,
                               ),
-                              style: TextStyle(
+                              style: const TextStyle(
                                   fontSize: 25,
                                   fontFamily: 'PTSans-Regular',
                                   fontWeight: FontWeight.w500,
@@ -209,11 +207,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   }
                                 },
                                 decoration: InputDecoration(
-                                  label: Text("Registered Email"),
+                                  label: const Text("Registered Email"),
                                   hintText: emailController.text,
                                   border: InputBorder.none,
                                 ),
-                                style: TextStyle(fontFamily: 'PTSans-Regular'),
+                                style: const TextStyle(fontFamily: 'PTSans-Regular'),
                                 textAlign: TextAlign.left,
                               ),
                             ),
@@ -231,16 +229,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   }
                                 },
                                 decoration: InputDecoration(
-                                  label: Text("Registered Phone"),
+                                  label: const Text("Registered Phone"),
                                   hintText: contactController.text,
                                   border: InputBorder.none,
                                 ),
-                                style: TextStyle(fontFamily: 'PTSans-Regular'),
+                                style: const TextStyle(fontFamily: 'PTSans-Regular'),
                                 textAlign: TextAlign.left,
                               ),
                             ),
                             Container(
-                              margin: EdgeInsets.only(top: 30),
+                              margin: const EdgeInsets.only(top: 30),
                               child: PrimaryButton(
                                   title: "EDIT PROFILE",
                                   onPressed: () async {

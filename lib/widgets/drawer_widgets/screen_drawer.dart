@@ -1,10 +1,11 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_advanced_drawer/flutter_advanced_drawer.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:v_safe/user/login_screen.dart';
 import 'package:v_safe/user/update_user_profile.dart';
 import 'package:v_safe/utils/constants.dart';
@@ -31,8 +32,38 @@ class _DrawerScreenState extends State<DrawerScreen> {
   String? id;
   String? profilePic;
   bool isSaving = false;
-
   TextEditingController nameController = TextEditingController();
+
+  LocationPermission? locationPermission;
+  String lat = "";
+  String long = "";
+
+  _getPermission() async => await [Permission.sms].request();
+
+  _getLatLong() async{
+    Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+    long = position.longitude.toString();
+    lat = position.latitude.toString();
+  }
+
+  _getCurrentLocation() async{
+    locationPermission = await Geolocator.checkPermission();
+
+    if(locationPermission == LocationPermission.denied){
+      locationPermission = await Geolocator.requestPermission();
+      Fluttertoast.showToast(msg: "Location permission denied!");
+      if(locationPermission == LocationPermission.deniedForever){
+        Fluttertoast.showToast(msg: "Location permission permanently denied!");
+      }
+    }
+    Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high,
+        forceAndroidLocationManager: true
+    ).catchError((e) {
+      Fluttertoast.showToast(msg: e.toString());
+      return e;
+    });
+  }
 
   // function to get user name from database
   getUserName() async {
@@ -64,10 +95,12 @@ class _DrawerScreenState extends State<DrawerScreen> {
   @override
   void initState() {
     super.initState();
-
     setState(() {
       getUserName();
       getData();
+      _getLatLong();
+      _getPermission();
+      _getCurrentLocation();
     });
   }
 
@@ -82,9 +115,9 @@ class _DrawerScreenState extends State<DrawerScreen> {
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
             colors: [
-              Color(0xff4801FF).withOpacity(0.75),
-              Color(0xff7010fb).withOpacity(0.70),
-              Color(0xff7918F2).withOpacity(0.65)
+              const Color(0xff4801FF).withOpacity(0.75),
+              const Color(0xff7010fb).withOpacity(0.70),
+              const Color(0xff7918F2).withOpacity(0.65)
             ],
           ),
         ),
@@ -97,7 +130,7 @@ class _DrawerScreenState extends State<DrawerScreen> {
       // openScale: 1.0,
       disabledGestures: false,
       childDecoration: const BoxDecoration(
-        borderRadius: const BorderRadius.all(Radius.circular(30)),
+        borderRadius: BorderRadius.all(Radius.circular(30)),
       ),
 
       drawer: SafeArea(
@@ -111,21 +144,21 @@ class _DrawerScreenState extends State<DrawerScreen> {
                 children: [
                   GestureDetector(
                     onTap: () {
-                      goTo(context, UpdateUserProfile());
+                      goTo(context, const UpdateUserProfile());
                     },
                     child: Container(
-                      margin: EdgeInsets.only(top: 30),
+                      margin: const EdgeInsets.only(top: 30),
                       decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           color: Colors.white,
                           border: Border.all(width: 1, color: Colors.white)),
                       child: profilePic == null
-                          ? CircleAvatar(
+                          ? const CircleAvatar(
+                              radius: 55,
                               child: Icon(
                                 Icons.person,
                                 size: 80,
                               ),
-                              radius: 55,
                             )
                           : profilePic!.contains('http')
                               ? CircleAvatar(
@@ -142,7 +175,7 @@ class _DrawerScreenState extends State<DrawerScreen> {
               ),
 
               Container(
-                margin: EdgeInsets.only(top: 10, bottom: 35),
+                margin: const EdgeInsets.only(top: 10, bottom: 35),
                 child: Form(
                   key: key,
                   child: TextFormField(
@@ -160,7 +193,7 @@ class _DrawerScreenState extends State<DrawerScreen> {
                       border: InputBorder.none,
                     ),
                     textAlign: TextAlign.center,
-                    style: TextStyle(color: Colors.white, fontSize: 22),
+                    style: const TextStyle(color: Colors.white, fontSize: 22),
                   ),
                 ),
               ),
@@ -171,31 +204,31 @@ class _DrawerScreenState extends State<DrawerScreen> {
                   Navigator.of(context).push(
                       MaterialPageRoute(builder: (context) => AppSetting()));
                 },
-                leading: Icon(Icons.settings),
-                title: Text('Setting'),
+                leading: const Icon(Icons.settings),
+                title: const Text('Setting'),
               ),
 
               // notification button
               ListTile(
                 onTap: () {
                   Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => NotificationPage()));
+                      builder: (context) => const NotificationPage()));
                 },
-                leading: Icon(Icons.notifications),
-                title: Text('Notification'),
+                leading: const Icon(Icons.notifications),
+                title: const Text('Notification'),
               ),
 
               // history button
               ListTile(
                 onTap: () {
                   Navigator.of(context).push(
-                      MaterialPageRoute(builder: (context) => HistoryPage()));
+                      MaterialPageRoute(builder: (context) => const HistoryPage()));
                 },
-                leading: Icon(Icons.history),
-                title: Text('History'),
+                leading: const Icon(Icons.history),
+                title: const Text('History'),
               ),
 
-              Divider(
+              const Divider(
                 thickness: 1,
                 color: Colors.white70,
               ),
@@ -205,18 +238,18 @@ class _DrawerScreenState extends State<DrawerScreen> {
                 onTap: () async{
                   await Share.share('https://github.com/HARIOM317/vSafe-app');
                 },
-                leading: Icon(Icons.share),
-                title: Text('Share'),
+                leading: const Icon(Icons.share),
+                title: const Text('Share'),
               ),
 
               // help button
               ListTile(
                 onTap: () {
                   Navigator.of(context).push(
-                      MaterialPageRoute(builder: (context) => HelpPage()));
+                      MaterialPageRoute(builder: (context) => const HelpPage()));
                 },
-                leading: Icon(Icons.help),
-                title: Text('Help'),
+                leading: const Icon(Icons.help),
+                title: const Text('Help'),
               ),
 
               // logout button
@@ -229,11 +262,11 @@ class _DrawerScreenState extends State<DrawerScreen> {
                           elevation: 10,
                           shadowColor: Colors.deepPurple.withOpacity(0.25),
                           backgroundColor: Colors.deepPurple[100],
-                          shape: RoundedRectangleBorder(
+                          shape: const RoundedRectangleBorder(
                               borderRadius: BorderRadius.all(Radius.circular(32.0))
                           ),
                           title: Row(
-                            children: [
+                            children: const [
                               Padding(
                                   padding: EdgeInsets.all(8.0),
                                 child: Icon(Icons.logout, color: Color(0xff6a1010), size: 30,),
@@ -246,7 +279,7 @@ class _DrawerScreenState extends State<DrawerScreen> {
                             ],
                           ),
 
-                          content: Text("Do you really want to sign out?"),
+                          content: const Text("Do you really want to sign out?"),
 
                           actions: [
                             TextButton(
@@ -258,19 +291,19 @@ class _DrawerScreenState extends State<DrawerScreen> {
 
                             TextButton(
                                 onPressed: () async {
-                                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginScreen()));
+                                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const LoginScreen()));
                                 },
-                                child: Text("Ok", style: TextStyle(color: Color(0xff6a1010)),))
+                                child: const Text("Ok", style: TextStyle(color: Color(0xff6a1010)),))
                           ],
                         );
                       }
                   );
                 },
-                leading: Icon(Icons.logout),
-                title: Text('Logout'),
+                leading: const Icon(Icons.logout),
+                title: const Text('Logout'),
               ),
 
-              Divider(
+              const Divider(
                 thickness: 1,
                 color: Colors.white70,
               ),
@@ -279,20 +312,20 @@ class _DrawerScreenState extends State<DrawerScreen> {
               ListTile(
                 onTap: () {
                   Navigator.of(context).push(
-                      MaterialPageRoute(builder: (context) => UserFeedback()));
+                      MaterialPageRoute(builder: (context) => const UserFeedback()));
                 },
-                leading: Icon(Icons.feedback),
-                title: Text('Feedback'),
+                leading: const Icon(Icons.feedback),
+                title: const Text('Feedback'),
               ),
 
               // policy button
               ListTile(
                 onTap: () {
                   Navigator.of(context).push(
-                      MaterialPageRoute(builder: (context) => PrivacyPolicy()));
+                      MaterialPageRoute(builder: (context) => const PrivacyPolicy()));
                 },
-                leading: Icon(Icons.privacy_tip),
-                title: Text('Privacy Policy'),
+                leading: const Icon(Icons.privacy_tip),
+                title: const Text('Privacy Policy'),
               ),
             ],
           ),
@@ -302,7 +335,7 @@ class _DrawerScreenState extends State<DrawerScreen> {
       child: Scaffold(
         appBar: AppBar(
           centerTitle: true,
-          title: Text(
+          title: const Text(
             "vSafe",
             style: TextStyle(
                 fontFamily: 'Dosis-Regular',
@@ -323,7 +356,7 @@ class _DrawerScreenState extends State<DrawerScreen> {
               valueListenable: _advancedDrawerController,
               builder: (_, value, __) {
                 return AnimatedSwitcher(
-                  duration: Duration(milliseconds: 250),
+                  duration: const Duration(milliseconds: 250),
                   child: Icon(
                     value.visible ? Icons.clear : Icons.menu,
                     key: ValueKey<bool>(value.visible),

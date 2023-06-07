@@ -1,7 +1,38 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+String lat = "";
+String long = "";
+
+LocationPermission? locationPermission;
+
+_getLatLong() async{
+  Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+
+  long = position.longitude.toString();
+  lat = position.latitude.toString();
+}
+
+_getCurrentLocation() async{
+  locationPermission = await Geolocator.checkPermission();
+
+  if(locationPermission == LocationPermission.denied){
+    locationPermission = await Geolocator.requestPermission();
+    Fluttertoast.showToast(msg: "Location permission denied!");
+    if(locationPermission == LocationPermission.deniedForever){
+      Fluttertoast.showToast(msg: "Location permission permanently denied!");
+    }
+  }
+  Geolocator.getCurrentPosition(
+      desiredAccuracy: LocationAccuracy.high,
+      forceAndroidLocationManager: true
+  ).catchError((e) {
+    Fluttertoast.showToast(msg: e.toString());
+    return e;
+  });
+}
 
 // function to create nearby service button
 Widget createNearbyWidget(String path, String text){
@@ -32,17 +63,32 @@ Widget createNearbyWidget(String path, String text){
   );
 }
 
-class NearbyMapService extends StatelessWidget{
-  const NearbyMapService({super.key});
 
+
+class NearbyMapService extends StatefulWidget{
+  const NearbyMapService({super.key});
   static Future<void> openMap(String location) async{
-    String googleUrl = "https://www.google.com/maps/search/$location";
-    final Uri _url = Uri.parse(googleUrl);
+    _getLatLong();
+    _getCurrentLocation();
+    String googleUrl = "https://www.google.com/maps/search/?api=1&query=$location/$lat%2C$long";
+    final Uri url = Uri.parse(googleUrl);
     try{
-      await launchUrl(_url);
+      await launchUrl(url);
     } catch (e){
       Fluttertoast.showToast(msg: "Something went wrong! call emergency number");
     }
+  }
+
+  @override
+  State<NearbyMapService> createState() => _NearbyMapServiceState();
+}
+
+class _NearbyMapServiceState extends State<NearbyMapService> {
+  @override
+  void initState() {
+    super.initState();
+    _getLatLong();
+    _getCurrentLocation();
   }
 
   @override
@@ -56,11 +102,11 @@ class NearbyMapService extends StatelessWidget{
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              NearbyPoliceStation(onMapFunction: openMap,),
-              NearbyHospital(onMapFunction: openMap),
-              NearbyPharmacy(onMapFunction: openMap),
-              NearbyBusStation(onMapFunction: openMap),
+            children: const [
+              NearbyPoliceStation(onMapFunction: NearbyMapService.openMap,),
+              NearbyHospital(onMapFunction: NearbyMapService.openMap),
+              NearbyPharmacy(onMapFunction: NearbyMapService.openMap),
+              NearbyBusStation(onMapFunction: NearbyMapService.openMap),
             ],
           ),
         ),
@@ -74,11 +120,13 @@ class NearbyPoliceStation extends StatelessWidget{
   final Function? onMapFunction;
   const NearbyPoliceStation({Key? key, this.onMapFunction}) : super(key: key);
 
+
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        onMapFunction!('police stations near me');
+        _getLatLong();
+        onMapFunction!('police stations');
       },
       child: createNearbyWidget("assets/images/nearby_service/police_station.png", "Police Stations")
     );

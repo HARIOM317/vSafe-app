@@ -1,13 +1,14 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class AppSetting extends StatelessWidget{
+  const AppSetting({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text(
+        title: const Text(
           "Settings",
           style: TextStyle(
               fontFamily: 'Dosis-Regular',
@@ -25,7 +26,7 @@ class AppSetting extends StatelessWidget{
         ),
       ),
 
-      body: Center(
+      body: const Center(
         child: Text("App Setting"),
       ),
     );

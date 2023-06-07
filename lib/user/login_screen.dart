@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:v_safe/components/custom_textfield.dart';
 import 'package:v_safe/components/primary_button.dart';
@@ -12,6 +11,8 @@ import 'package:v_safe/user/register_user.dart';
 import 'package:v_safe/utils/constants.dart';
 
 class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
+
   @override
   State<LoginScreen> createState() => _LoginScreenState();
 }
@@ -19,7 +20,7 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   bool isPasswordHide = true;
   final _formKey = GlobalKey<FormState>();
-  final _formData = Map<String, Object>();
+  final _formData = <String, Object>{};
   bool isLoading = false;
 
   // function to disable back button
@@ -52,11 +53,13 @@ class _LoginScreenState extends State<LoginScreen> {
             .then((value) {
           if (value['type'] == 'user') {
             MySharedPreference.saveUserType('user');
-            goTo(context, MainSplashScreen());
+            goTo(context, const MainSplashScreen());
           }
         });
         // MySharedPreference.saveUser();
-        goTo(context, MainSplashScreen());
+        // ignore: use_build_context_synchronously
+        if (!context.mounted) return;
+        goTo(context, const MainSplashScreen());
       }
     } on FirebaseAuthException catch (e) {
       setState(() {
@@ -82,9 +85,9 @@ class _LoginScreenState extends State<LoginScreen> {
           height: double.infinity,
           decoration: BoxDecoration(
               gradient: LinearGradient(colors: [
-            Color(0xffdad4ec).withOpacity(0.75),
-            Color(0xffdad4ec).withOpacity(0.5),
-            Color(0xfff3e7e9).withOpacity(0.75)
+            const Color(0xffdad4ec).withOpacity(0.75),
+            const Color(0xffdad4ec).withOpacity(0.5),
+            const Color(0xfff3e7e9).withOpacity(0.75)
           ])
           ),
           child: Center(
@@ -110,8 +113,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                 ),
 
                                 // login text
-                                Padding(
-                                  padding: const EdgeInsets.all(15.0),
+                                const Padding(
+                                  padding: EdgeInsets.all(15.0),
                                   child: Text(
                                     "Welcome",
                                     style: TextStyle(
@@ -135,7 +138,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                           textInputAction: TextInputAction.next,
                                           keyboardType:
                                               TextInputType.emailAddress,
-                                          prefix: Icon(Icons.person),
+                                          prefix: const Icon(Icons.person),
                                           onSave: (email) {
                                             _formData['email'] = email ?? "";
                                           },
@@ -157,7 +160,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                         child: LoginTextField(
                                           hintText: "Password",
                                           keyboardType: TextInputType.visiblePassword,
-                                          prefix: Icon(Icons.fingerprint),
+                                          prefix: const Icon(Icons.fingerprint),
                                           onSave: (password) {
                                             _formData['password'] =
                                                 password ?? "";
@@ -179,8 +182,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                               });
                                             },
                                             icon: isPasswordHide
-                                                ? Icon(Icons.visibility_off)
-                                                : Icon(Icons.visibility),
+                                                ? const Icon(Icons.visibility_off)
+                                                : const Icon(Icons.visibility),
                                           ),
                                         ),
                                       ),
@@ -196,9 +199,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                           alignment: Alignment.bottomRight,
                                           child: GestureDetector(
                                             onTap: () {
-                                              Navigator.push(context, MaterialPageRoute(builder: (context) => ForgotPasswodPage()));
+                                              Navigator.push(context, MaterialPageRoute(builder: (context) => const ForgotPasswordPage()));
                                             },
-                                            child: Text(
+                                            child: const Text(
                                               "Forgot Password?",
                                               style: TextStyle(
                                                   fontFamily: 'PTSans-Regular',
@@ -234,7 +237,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     crossAxisAlignment: CrossAxisAlignment.center,
                                     children: [
-                                      Text(
+                                      const Text(
                                         "Don't have an account?",
                                         style: TextStyle(
                                             fontFamily: 'PTSans-Regular'),

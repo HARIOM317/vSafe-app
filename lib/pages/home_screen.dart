@@ -7,6 +7,8 @@ import 'package:v_safe/widgets/home_widgets/nearby_map_service.dart';
 import 'package:v_safe/widgets/home_widgets/situation.dart';
 
 class HomeScreen extends StatefulWidget {
+  const HomeScreen({super.key});
+
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
@@ -19,7 +21,7 @@ class _HomeScreenState extends State<HomeScreen> {
       padding: const EdgeInsets.only(left: 5.0, top: 5.0),
       child: Text(
         text,
-        style: TextStyle(
+        style: const TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.bold,
             fontFamily: 'Rajdhani-Regular',
@@ -35,7 +37,7 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Scaffold(
         body: Container(
           decoration: BoxDecoration(
-            color: Color(0xfff9d2cf).withOpacity(0.5),
+            color: const Color(0xfff9d2cf).withOpacity(0.5),
           ),
           child: SafeArea(
             child: Padding(
@@ -48,7 +50,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       CustomCarousel(),
 
                       sectionHeading("Explore Nearby"),
-                      NearbyMapService(),
+                      const NearbyMapService(),
 
                       sectionHeading("Situation"),
                       Situation(),

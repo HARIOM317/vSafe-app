@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -7,11 +6,13 @@ import 'package:v_safe/db/share_pref.dart';
 import 'package:v_safe/pages/intro_pages/splash_screen.dart';
 import 'package:v_safe/pages/main_splash_screen.dart';
 import 'package:v_safe/utils/constants.dart';
+import 'package:v_safe/utils/flutter_background_services.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   await MySharedPreference.init();
+  await initializeService();
   runApp(const MyApp());
 }
 
@@ -36,35 +37,18 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.deepPurple,
       ),
 
-      // todo ----------------------------------------------------------
+      // todo -----X----- STARTING POINT OF APP -----X-----
       home: FutureBuilder(
           future: MySharedPreference.getUserType(),
           builder: (BuildContext context, AsyncSnapshot snapshot) {
             if (snapshot.data == "") {
-              return SplashScreen();
+              return const SplashScreen();
             }
             if (snapshot.data == "user") {
-              return MainSplashScreen();
+              return const MainSplashScreen();
             }
             return progressIndicator(context);
           }),
-
-      // todo ----------------------------------------------------------
-
-
-      // home: StreamBuilder(
-      //     stream: FirebaseAuth.instance.authStateChanges(),
-      //     builder: (BuildContext context, AsyncSnapshot snapshot) {
-      //       if (snapshot.data == "") {
-      //         return SplashScreen();
-      //       }
-      //       if (snapshot.data == "user") {
-      //         return MainSplashScreen();
-      //       }
-      //       return progressIndicator(context);
-      //     }),
-
-
 
     );
   }

@@ -1,13 +1,14 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class UserFeedback extends StatelessWidget{
+  const UserFeedback({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text(
+        title: const Text(
           "Feedback",
           style: TextStyle(
               fontFamily: 'Dosis-Regular',
@@ -25,7 +26,7 @@ class UserFeedback extends StatelessWidget{
         ),
       ),
 
-      body: Center(
+      body: const Center(
         child: Text("User Feedback"),
       ),
     );

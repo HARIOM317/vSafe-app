@@ -5,6 +5,7 @@ import 'package:v_safe/utils/quotes.dart';
 import 'package:v_safe/widgets/home_widgets/safety_tips.dart';
 
 class CustomCarousel extends StatelessWidget{
+  const CustomCarousel({super.key});
 
   void navigateToRoute(BuildContext context, Widget route) {
     Navigator.push(context, CupertinoPageRoute(builder: (context) => route));

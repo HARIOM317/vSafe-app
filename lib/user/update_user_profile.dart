@@ -4,13 +4,14 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:uuid/uuid.dart';
 import 'package:v_safe/components/primary_button.dart';
 
 class UpdateUserProfile extends StatefulWidget {
+  const UpdateUserProfile({super.key});
+
   @override
   State<UpdateUserProfile> createState() => _UpdateUserProfile();
 }
@@ -92,7 +93,7 @@ class _UpdateUserProfile extends State<UpdateUserProfile> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text(
+        title: const Text(
           "Update Your Profile",
           style: TextStyle(
               fontFamily: 'Dosis-Regular',
@@ -113,11 +114,11 @@ class _UpdateUserProfile extends State<UpdateUserProfile> {
         width: double.infinity,
         height: double.infinity,
         decoration: BoxDecoration(
-          gradient: LinearGradient(colors: [Color(0xfffdcbf1).withOpacity(0.5), Color(0xffe6dee9)], begin: Alignment.topLeft, end: Alignment.bottomRight),
+          gradient: LinearGradient(colors: [const Color(0xfffdcbf1).withOpacity(0.5), const Color(0xffe6dee9)], begin: Alignment.topLeft, end: Alignment.bottomRight),
         ),
         child: SafeArea(
           child: isSaving == true
-              ? Center(child: CircularProgressIndicator())
+              ? const Center(child: CircularProgressIndicator())
               : Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Center(
@@ -128,9 +129,9 @@ class _UpdateUserProfile extends State<UpdateUserProfile> {
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
                             Container(
-                              padding: EdgeInsets.all(10),
-                              margin: EdgeInsets.all(10),
-                              child: Text(
+                              padding: const EdgeInsets.all(10),
+                              margin: const EdgeInsets.all(10),
+                              child: const Text(
                                 "USER PROFILE",
                                 style: TextStyle(
                                     fontSize: 25,
@@ -141,19 +142,19 @@ class _UpdateUserProfile extends State<UpdateUserProfile> {
                             Stack(
                               children: [
                                 Container(
-                                  margin: EdgeInsets.only(top: 10),
+                                  margin: const EdgeInsets.only(top: 10),
                                   decoration: BoxDecoration(
                                       shape: BoxShape.circle,
                                       color: Colors.white,
                                       border: Border.all(
                                           width: 3, color: Colors.white)),
                                   child: profilePic == null
-                                      ? CircleAvatar(
+                                      ? const CircleAvatar(
+                                          radius: 75,
                                           child: Icon(
                                             Icons.person,
                                             size: 100,
                                           ),
-                                          radius: 75,
                                         )
                                       : profilePic!.contains('http')
                                           ? CircleAvatar(
@@ -190,11 +191,11 @@ class _UpdateUserProfile extends State<UpdateUserProfile> {
                                             shape: BoxShape.circle,
                                             border: Border.all(
                                                 width: 3, color: Colors.white),
-                                            gradient: LinearGradient(colors: [
+                                            gradient: const LinearGradient(colors: [
                                               Color(0xff6416ff),
                                               Color(0xff5623a3)
                                             ])),
-                                        child: Icon(
+                                        child: const Icon(
                                           Icons.camera_alt_rounded,
                                           color: Colors.white,
                                         ),
@@ -216,17 +217,17 @@ class _UpdateUserProfile extends State<UpdateUserProfile> {
                                   }
                                 },
                                 decoration: InputDecoration(
-                                  prefixIcon: Icon(Icons.person),
-                                  suffixIcon: Icon(Icons.edit),
+                                  prefixIcon: const Icon(Icons.person),
+                                  suffixIcon: const Icon(Icons.edit),
                                   hintText: nameController.text,
                                   border: InputBorder.none,
-                                  focusedBorder: UnderlineInputBorder(
+                                  focusedBorder: const UnderlineInputBorder(
                                       borderSide: BorderSide(
                                           style: BorderStyle.solid,
                                           color: Color(0xff5720c6),
                                           width: 1.5)),
                                 ),
-                                style: TextStyle(
+                                style: const TextStyle(
                                     fontSize: 16, fontFamily: 'PTSans-Regular'),
                                 textAlign: TextAlign.left,
                               ),
@@ -246,17 +247,17 @@ class _UpdateUserProfile extends State<UpdateUserProfile> {
                                   }
                                 },
                                 decoration: InputDecoration(
-                                  prefixIcon: Icon(Icons.phone),
-                                  suffixIcon: Icon(Icons.edit),
+                                  prefixIcon: const Icon(Icons.phone),
+                                  suffixIcon: const Icon(Icons.edit),
                                   hintText: contactController.text,
                                   border: InputBorder.none,
-                                  focusedBorder: UnderlineInputBorder(
+                                  focusedBorder: const UnderlineInputBorder(
                                       borderSide: BorderSide(
                                           style: BorderStyle.solid,
                                           color: Color(0xff5720c6),
                                           width: 1.5)),
                                 ),
-                                style: TextStyle(
+                                style: const TextStyle(
                                     fontSize: 16, fontFamily: 'PTSans-Regular'),
                                 textAlign: TextAlign.left,
                               ),
@@ -274,13 +275,13 @@ class _UpdateUserProfile extends State<UpdateUserProfile> {
                                   }
                                 },
                                 decoration: InputDecoration(
-                                    prefixIcon: Icon(
+                                    prefixIcon: const Icon(
                                       CupertinoIcons.mail_solid,
                                       color: Colors.grey,
                                     ),
                                     hintText: emailController.text,
                                     border: InputBorder.none),
-                                style: TextStyle(
+                                style: const TextStyle(
                                     fontSize: 16,
                                     fontFamily: 'PTSans-Regular',
                                     color: Colors.grey),
@@ -288,7 +289,7 @@ class _UpdateUserProfile extends State<UpdateUserProfile> {
                               ),
                             ),
                             Container(
-                              margin: EdgeInsets.only(top: 50),
+                              margin: const EdgeInsets.only(top: 50),
                               child: PrimaryButton(
                                   title: "UPDATE PROFILE",
                                   onPressed: () async {
@@ -299,7 +300,7 @@ class _UpdateUserProfile extends State<UpdateUserProfile> {
                                             elevation: 10,
                                             shadowColor: Colors.deepPurple.withOpacity(0.25),
                                             backgroundColor: Colors.deepPurple[100],
-                                            shape: RoundedRectangleBorder(
+                                            shape: const RoundedRectangleBorder(
                                                 borderRadius: BorderRadius.all(Radius.circular(32.0)),
                                             ),
                                             title: const Text('Confirm'),
@@ -362,7 +363,7 @@ class _UpdateUserProfile extends State<UpdateUserProfile> {
 
   Future<String?> uploadImage(String filePath) async {
     try {
-      final fileName = Uuid().v4();
+      final fileName = const Uuid().v4();
       final Reference fbStorage =
           FirebaseStorage.instance.ref('profile').child(fileName);
       final UploadTask uploadTask = fbStorage.putFile(File(filePath));
@@ -374,6 +375,7 @@ class _UpdateUserProfile extends State<UpdateUserProfile> {
     } catch (e) {
       Fluttertoast.showToast(msg: "Something went wrong!");
     }
+    return null;
   }
 
   update() async {

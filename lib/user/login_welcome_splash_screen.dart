@@ -11,7 +11,7 @@ class LoginWelcomeSplashScreen extends StatelessWidget{
       splash: 'assets/images/intro_images/login_welcome.png',
       nextScreen: const WelcomeScreen(),
       splashTransition: SplashTransition.scaleTransition,
-      backgroundColor: Color(0xffb7a7ff),
+      backgroundColor: const Color(0xffb7a7ff),
       splashIconSize: 200,
       duration: 2500,
     );

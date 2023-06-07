@@ -24,7 +24,7 @@ class WelcomeScreen extends StatelessWidget {
       child: Container(
         width: double.infinity,
         height: double.infinity,
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
             gradient: LinearGradient(
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
@@ -52,7 +52,7 @@ class WelcomeScreen extends StatelessWidget {
                   child: PrimaryButton(
                     title: "Login",
                     onPressed: () {
-                      goTo(context, LoginScreen());
+                      goTo(context, const LoginScreen());
                       },
                   ),
                 ),
@@ -63,7 +63,7 @@ class WelcomeScreen extends StatelessWidget {
                   child: PrimaryButton(
                       title: "Register",
                       onPressed: () {
-                        goTo(context, RegisterUser());
+                        goTo(context, const RegisterUser());
                       }
                   ),
                 ),

@@ -1,11 +1,9 @@
-import 'dart:ui';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-Color primaryColor = Color(0xff471aa0);
+Color primaryColor = const Color(0xff471aa0);
 
 Widget progressIndicator(BuildContext context) {
-  return Center(
+  return const Center(
       child: CircularProgressIndicator(
           backgroundColor: Colors.indigo,
           color: Color(0xff2d3a82),
@@ -17,12 +15,12 @@ showAlertDialogueBox(BuildContext context, String msg) {
       context: context,
       builder: (context) => AlertDialog(
         backgroundColor: Colors.deepPurpleAccent,
-            shape: RoundedRectangleBorder(
+            shape: const RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(24))
             ),
             shadowColor: Colors.deepPurpleAccent.withOpacity(0.5),
-            titlePadding: EdgeInsets.all(25),
-            titleTextStyle: TextStyle(
+            titlePadding: const EdgeInsets.all(25),
+            titleTextStyle: const TextStyle(
                 color: Colors.white,
                 fontSize: 18,
               fontFamily: 'PTSans-Regular'
@@ -40,11 +38,11 @@ void goTo(BuildContext context, Widget nextScreen) {
       ));
 }
 
-Widget introTextDesign1(String text, {double font_size = 20.0, TextAlign alignment = TextAlign.center}) {
+Widget introTextDesign1(String text, {double fontSize = 20.0, TextAlign alignment = TextAlign.center}) {
   return Text(text,
     style: TextStyle(
       fontFamily: 'Acme-Regular',
-      fontSize: font_size,
+      fontSize: fontSize,
       color: Colors.black.withOpacity(0.5)
     ),
     textAlign: alignment,

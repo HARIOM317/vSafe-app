@@ -14,5 +14,5 @@ class MySharedPreference {
   }
 
   static Future<String>? getUserType() async =>
-      await _preferences!.getString(key) ?? "";
+      _preferences!.getString(key) ?? "";
 }
