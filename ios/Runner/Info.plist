@@ -47,11 +47,15 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<key>UIBackgroundModes</key>
 
 	<key>LSApplicationQueriesSchemes</key>
     <array>
       <string>sms</string>
       <string>tel</string>
+      <string>processing</string>
+      <string>remote-notification</string>
+      <string>voip</string>
     </array>
 </dict>
 </plist>

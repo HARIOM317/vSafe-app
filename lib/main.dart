@@ -2,11 +2,11 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:v_safe/db/share_pref.dart';
-import 'package:v_safe/pages/intro_pages/splash_screen.dart';
-import 'package:v_safe/pages/main_splash_screen.dart';
-import 'package:v_safe/utils/constants.dart';
-import 'package:v_safe/utils/flutter_background_services.dart';
+import 'package:v_safe/src/db/share_pref.dart';
+import 'package:v_safe/src/pages/intro_pages/splash_screen.dart';
+import 'package:v_safe/src/pages/required_pages/main_splash_screen.dart';
+import 'package:v_safe/src/utils/constants.dart';
+import 'package:v_safe/src/utils/flutter_background_services.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

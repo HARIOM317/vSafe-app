@@ -61,16 +61,21 @@ dependencies:
   uuid: ^3.0.7
   firebase_storage: ^11.2.2
   liquid_pull_to_refresh: ^3.0.1
-  share_plus: ^7.0.2
+  share_plus: ^7.0.0
   auth: ^8.2.0+2
   background_sms: ^0.0.4
   geolocator: ^9.0.2
   geocoding: ^2.1.0
-  email_otp: ^1.0.4
+  email_otp: ^2.0.1
   shake: ^2.2.0
   flutter_background_service: ^2.4.6
+  flutter_background_service_android: ^3.0.3
+  flutter_background_service_ios: ^2.4.0
   flutter_local_notifications: ^14.1.1
   vibration: ^1.7.7
+  audioplayers: ^1.0.1
+  flutter_slidable: ^3.0.0
+  speech_to_text: ^6.1.1
 
 
 dev_dependencies:
@@ -123,9 +128,11 @@ flutter:
     - assets/images/nearby_service/
     - assets/images/icon/
     - assets/images/intro_images/
+    - assets/images/fake_call/
     - assets/animations/intro_app_animations/
     - assets/animations/other_animations/
     - assets/videos/safety_videos/
+    - assets/audio/caller_tune.mp3
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
